@@ -27,9 +27,21 @@
               "src/assets"
             ],
             "styles": [
+              "src/assets/custom/css/style.css",
+              "src/assets/custom/css/animate.compat.css",
+              "src/assets/custom/css/mc-calendar.min.css",
+              "src/assets/custom/css/utilities.css",              
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/custom/js/common.js",
+              "src/assets/custom/js/mc-calendar.min.js",
+              "src/assets/custom/js/jquery.min.js",
+              "src/assets/custom/js/timepicki.js",
+              "src/assets/custom/js/details.js",
+              
+              
+            ]
           },
           "configurations": {
             "production": {
