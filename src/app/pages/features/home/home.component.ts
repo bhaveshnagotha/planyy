@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { constants, CustomValidator } from 'src/app/_constants';
 declare var $: any;
 
 @Component({
@@ -8,9 +10,69 @@ declare var $: any;
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+
+  signUpForm:any = FormGroup;
+  signInForm:any = FormGroup;
+
+
+  signupform:boolean = false
+
+  constructor(public fb: FormBuilder) { }
+
+  signUp() {
+    
+    if (this.signUpForm.invalid) {
+      console.log("false")
+      return;
+    }
+    console.log(this.signUpForm.value)
+    
+  } 
+
+  signIn() {
+    if (this.signInForm.invalid) {
+      console.log("false")
+      return;
+    }
+    console.log("true")
+  } 
+
+  showForm(e:string){
+    if(e == 'signin'){
+      this.signupform = false
+    }else{
+      this.signupform = true
+    }
+
+  }
+
 
   ngOnInit(): void {
+
+
+    
+
+
+    this.signUpForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      mobileNumber: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
+      password: ['', [Validators.required, CustomValidator.createPasswordStrengthValidator()]],
+      confirmPassword: ['']
+    }
+    , { 
+      validator: CustomValidator.mustMatch('password', 'confirmPassword')     
+    })   
+
+
+    this.signInForm = this.fb.group({
+      email_mobile: ['', [Validators.required]],     
+      password: ['', [Validators.required]],      
+    });
+
+
+    
+
+
 
     var self = this
 
@@ -121,12 +183,14 @@ export class HomeComponent implements OnInit {
 
     $(".timepicker").timepicki({ reset: true });
 
-    $("#signup-btn").click(function () {
-      openOverlay();
-      $("#signup-modal").addClass("d-none");
-      $("#otp-modal").removeClass("d-none");
-    });
+    // $("#signup-btn").click(function () {
+    //   openOverlay();
+    //   $("#signup-modal").addClass("d-none");
+    //   $("#otp-modal").removeClass("d-none");
+    // });
 
   }
+
+  
 
 }

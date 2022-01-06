@@ -1,23 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-<<<<<<< HEAD
-import  { HomeComponent } from 'src/app/pages/features/home/home.component';
-import { ReadsComponent } from './pages/features/reads/reads.component';
-
-const routes: Routes = [
-  {
-    path: '',    
-    component: HomeComponent
-  },
-  {
-    path: 'home',    
-    component: HomeComponent
-  },
-  {
-    path: 'reads',    
-    component: ReadsComponent
-  }
-=======
 
 const routes: Routes = [
   {
@@ -45,7 +27,6 @@ const routes: Routes = [
     redirectTo: '',
     pathMatch: 'full'
   },
->>>>>>> 56cac00e7aeb70608dcb2ba341ac9c797b810e31
 ];
 
 @NgModule({
