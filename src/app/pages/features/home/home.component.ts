@@ -13,6 +13,9 @@ export class HomeComponent implements OnInit {
 
   signUpForm:any = FormGroup;
   signInForm:any = FormGroup;
+  requestCallForm:any = FormGroup;
+  sentMsgForm:any = FormGroup;
+  
 
 
   signupform:boolean = false
@@ -37,9 +40,29 @@ export class HomeComponent implements OnInit {
     console.log("true")
   } 
 
+  requestCall() {
+    if (this.requestCallForm.invalid) {
+      console.log("false")
+      return;
+    }
+    console.log("true")
+  }
+  
+  sentMessage() {
+    if (this.sentMsgForm.invalid) {
+      console.log("false")
+      return;
+    }
+    console.log("true")
+  }
+
   showForm(e:string){
+    this.signUpForm.reset();
+    this.signInForm.reset();
+    
     if(e == 'signin'){
       this.signupform = false
+      
     }else{
       this.signupform = true
     }
@@ -67,6 +90,20 @@ export class HomeComponent implements OnInit {
     this.signInForm = this.fb.group({
       email_mobile: ['', [Validators.required]],     
       password: ['', [Validators.required]],      
+    });
+
+
+    this.requestCallForm = this.fb.group({
+      name: ['', [Validators.required]],     
+      mobile_number: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],      
+      date: ['', [Validators.required]],      
+      time: ['', [Validators.required]],      
+    });
+
+    this.sentMsgForm = this.fb.group({
+      name: ['', [Validators.required]],     
+      mobile_number: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],      
+      message: ['', [Validators.required]]            
     });
 
 

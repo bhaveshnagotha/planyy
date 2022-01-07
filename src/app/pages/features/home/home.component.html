@@ -678,19 +678,29 @@
       <h2 class="fw-600 mb-4 resist-size text-center text-sm-left">
         Sent us a massage
       </h2>
-      <div class="custom-form-control pt-3">
-        <input class="custom-input" type="text" placeholder="Enter your name" />
+
+      <form id="sent-message-frm" [formGroup]="sentMsgForm" (ngSubmit)="sentMessage()">
+
+      
+      <div class="custom-form-control pt-3 with-helper" [class]="(sentMsgForm.get('name').invalid && sentMsgForm.get('name').touched) ? 'error':''">
+        <input class="custom-input" type="text" formControlName="name" placeholder="Enter your name" />
+        <app-show-error [field]="sentMsgForm.get('name')" [name]="'Your name'"></app-show-error>
       </div>
-      <div class="custom-form-control mt-4">
-        <input class="custom-input" type="text" placeholder="Enter your Mobile No." />
+      <div class="custom-form-control mt-4 with-helper" [class]="(sentMsgForm.get('mobile_number').invalid && sentMsgForm.get('mobile_number').touched) ? 'error':''">
+        <input class="custom-input" type="text" formControlName="mobile_number" placeholder="Enter your Mobile No." />
+        <app-show-error [field]="sentMsgForm.get('mobile_number')" [name]="'Mobile number'"></app-show-error>
       </div>
-      <div class="custom-form-control mt-4">
-        <textarea class="custom-input" placeholder="Write your massage" rows="5"></textarea>
+      <div class="custom-form-control mt-4 with-helper" [class]="(sentMsgForm.get('message').invalid && sentMsgForm.get('message').touched) ? 'error':''">
+        <textarea class="custom-input" formControlName="message" placeholder="Write your message" rows="5"></textarea>
+        <app-show-error [field]="sentMsgForm.get('message')" [name]="'Your message'"></app-show-error>
       </div>
       <div class="my-5 w-100"></div>
       <div class="bottom-btn-sm">
-        <button class="btn btn-bg-primary mt-4">Sent message</button>
+        <button type="submit" [disabled]="sentMsgForm.invalid" class="btn btn-bg-primary mt-4" id="msg-btn">Sent message</button>
       </div>
+
+    </form>
+
     </div>
   </div>
   <div class="custom-modal xs d-none" id="call-modal">
@@ -701,15 +711,19 @@
       <h2 class="fw-600 mb-4 resist-size text-center text-sm-left">
         Request Call Back
       </h2>
-      <div class="custom-form-control pt-3">
-        <input class="custom-input" type="text" placeholder="Enter your name" />
+
+      <form id="request-call-frm" [formGroup]="requestCallForm" (ngSubmit)="requestCall()">
+      <div class="custom-form-control pt-3 with-helper" [class]="(requestCallForm.get('name').invalid && requestCallForm.get('name').touched) ? 'error':''">
+        <input class="custom-input" type="text" formControlName="name" placeholder="Enter your name" />
+        <app-show-error [field]="requestCallForm.get('name')" [name]="'Your name'"></app-show-error>
       </div>
-      <div class="custom-form-control mt-4">
-        <input class="custom-input" type="text" placeholder="Enter your Mobile No." />
+      <div class="custom-form-control mt-4 with-helper" [class]="(requestCallForm.get('mobile_number').invalid && requestCallForm.get('mobile_number').touched) ? 'error':''">
+        <input class="custom-input" type="text" formControlName="mobile_number" placeholder="Enter your Mobile No." />
+        <app-show-error [field]="requestCallForm.get('mobile_number')" [name]="'Mobile number'"></app-show-error>
       </div>
-      <div class="custom-form-control mt-4">
+      <div class="custom-form-control mt-4 with-helper" [class]="(requestCallForm.get('date').invalid && requestCallForm.get('date').touched) ? 'error':''">
         <div class="with-icon">
-          <input class="custom-input" type="text" id="example" type="date" placeholder="Choose Date" /><svg class="icon"
+          <input class="custom-input" type="text" formControlName="date" id="example" type="date" placeholder="Choose Date" /><svg class="icon"
             xmlns="http://www.w3.org/2000/svg" width="16" height="16.055" viewBox="0 0 16 16.055">
             <g id="Group_10631" data-name="Group 10631" transform="translate(-790 -600.973)">
               <g id="Group_1614" data-name="Group 1614" opacity="0">
@@ -733,11 +747,14 @@
               </g>
             </g>
           </svg>
+
+          <app-show-error [field]="requestCallForm.get('date')" [name]="'Date'"></app-show-error>
+
         </div>
       </div>
-      <div class="custom-form-control mt-4">
+      <div class="custom-form-control mt-4 with-helper" [class]="(requestCallForm.get('time').invalid && requestCallForm.get('time').touched) ? 'error':''">
         <div class="with-icon">
-          <input class="custom-input timepicker" type="text" placeholder="Choose Time" onfocus="(this.type='date')"
+          <input class="custom-input timepicker" type="text" formControlName="time" placeholder="Choose Time" onfocus="(this.type='date')"
             onblur="(this.type='text')" />
           <div id="dark-overlay-timer"></div>
 
@@ -756,11 +773,16 @@
               </g>
             </g>
           </svg>
+
+          <app-show-error [field]="requestCallForm.get('time')" [name]="'Time'"></app-show-error>
         </div>
       </div>
       <div class="bottom-btn-sm">
-        <button class="btn btn-bg-primary mt-4">Call</button>
+        <button type="submit" [disabled]="requestCallForm.invalid" id="call-btn" class="btn btn-bg-primary mt-4">Call</button>
       </div>
+    </form>
+
+
     </div>
   </div>
   <div class="custom-modal md d-none" id="signup-modal">
