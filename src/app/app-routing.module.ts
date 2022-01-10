@@ -21,6 +21,10 @@ const routes: Routes = [
   {
     path: 'terms',
     loadChildren: () => import('src/app/pages/features/terms-and-condition/terms-and-condition.module').then(m => m.TermsAndConditionModule)
+  },
+  {
+    path: 'service',
+    loadChildren: () => import('src/app/pages/features/service/service.module').then(m => m.ServiceModule)
   },  
   {
     path: '',

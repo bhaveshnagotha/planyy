@@ -665,8 +665,11 @@
     </div>
 
     <div class="bottom-btn">
-      <button class="btn btn-bg-primary signup fs-24 fs-1919-16">
+      <button (click)="openSignupPopUp('rightsidebtn')" class="btn btn-bg-primary signup fs-24 fs-1919-16" *ngIf="sessionActive">
         Sign Up
+      </button>
+      <button class="btn btn-bg-primary signup fs-24 fs-1919-16" *ngIf="!sessionActive">
+        Logout
       </button>
     </div>
   </div>
@@ -829,28 +832,31 @@
                     <app-show-error [field]="signUpForm.get('mobileNumber')" [name]="'Mobile Number'"></app-show-error>
                 </div>
                 <div class="custom-form-control mt-4 pwd-container">
-                    <!-- <div class="custom-tooltip password">
+                    <div class="custom-tooltip password">
                         <div class="left-arrow"></div>                                
                         <ul>
                             <li>
-                                <img src="./assets/custom/vector/pwd-not-fulfilled.svg" alt="" />
+                                <img *ngIf="!passwordCheck.eightormore" src="./assets/custom/vector/pwd-not-fulfilled.svg" alt="" />
+                                <img *ngIf="passwordCheck.eightormore" src="./assets/custom/vector/pwd-fulfilled.svg" alt="" />
                                 <div>8 or more characters</div>
                             </li>
                             <li>
-                                <img src="./assets/custom/vector/pwd-fulfilled.svg" alt="" />
+                              <img *ngIf="!passwordCheck.upperlower" src="./assets/custom/vector/pwd-not-fulfilled.svg" alt="" />
+                              <img *ngIf="passwordCheck.upperlower" src="./assets/custom/vector/pwd-fulfilled.svg" alt="" />
                                 <div>Upper & lowercase letter</div>
                             </li>
                             <li>
-                                <img src="./assets/custom/vector/pwd-fulfilled.svg" alt="" />
+                              <img *ngIf="!passwordCheck.onenumber" src="./assets/custom/vector/pwd-not-fulfilled.svg" alt="" />
+                              <img *ngIf="passwordCheck.onenumber" src="./assets/custom/vector/pwd-fulfilled.svg" alt="" />
                                 <div>At least one number</div>
                             </li>
                         </ul>
-                    </div> -->
+                    </div>
                     <div class="with-icon">
 
                         <div class="custom-form-control mt-4 with-helper" [class]="(signUpForm.get('password').invalid && signUpForm.get('password').touched) ? 'error':''">
-                            <input class="custom-input" type="password" formControlName="password" autocomplete="off" placeholder="Password" />
-                            <app-show-error [field]="signUpForm.get('password')" [name]="'Password'"></app-show-error>
+                            <input class="custom-input" type="password" formControlName="password" autocomplete="off" placeholder="Password" (input)="checkPassword($event)" />
+                            <!-- <app-show-error [field]="signUpForm.get('password')" [name]="'Password'"></app-show-error> -->
                         </div>
                         <!-- <svg class="icon no-clr" id="Component_95_6" data-name="Component 95 – 6"
                             xmlns="http://www.w3.org/2000/svg" width="16.707" height="16.707"
@@ -1036,7 +1042,7 @@
       <a data-toggle="modal" data-target="#exampleModal6">        
         <img height="24px" width="24px" src="./assets/custom/vector/menu-new.svg" alt="menu" />
       </a>
-      <a class="smo">
+      <a class="smo" *ngIf="sessionActive" (click)="openSignupPopUp('header')">
         <img src="./assets/custom/images/user.svg" />
       </a>
     </div>
@@ -1296,7 +1302,7 @@
         <div class="fs-16 fs-1919-14 fs-991-12">
           © 2021 Planny Financial Advisors Private Limited
         </div>
-        <div class="fs-16 fs-1919-14 fs-991-12">www.planyy.com</div>
+        <div class="fs-16 fs-1919-14 fs-991-12"><a routerLink="/home">www.planyy.com</a></div>
       </div>
     </div>
   </div>

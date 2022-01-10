@@ -23,12 +23,17 @@ export class HomeComponent implements OnInit {
   signInForm:any = FormGroup;
   requestCallForm:any = FormGroup;
   sentMsgForm:any = FormGroup;
+  passwordCheck: any ={
+    eightormore: false,
+    upperlower:false,
+    onenumber: false
+  }
 
 
   socialUser:any = SocialUser;
   isLoggedin:boolean = false; 
+  sessionActive:boolean = true;  
   
-
 
   signupform:boolean = false
 
@@ -44,9 +49,6 @@ export class HomeComponent implements OnInit {
     var data = [{
       "data": this.signUpForm.value
     }]
-  
-    
-    console.log(this.signUpForm.value)    
     
     this.authenticationService.signup(data[0]).pipe(first()).subscribe(data => {
         console.log(data);
@@ -106,9 +108,28 @@ export class HomeComponent implements OnInit {
     this.socialAuthService.signOut();
   }
 
+  openSignupPopUp(str:string){    
+    
+    if(str == 'header'){
+      this.signupform = false;
+      $("#dark-overlay").removeClass("d-none");
+      $("#signup-modal").removeClass("d-none");
+    }
+    
+    if(str == 'rightsidebtn'){
+
+      $("#dark-overlay-beneath").addClass("d-none");
+      $("#right-menu").addClass("d-none");
+  
+      this.signupform = true;
+      $("#dark-overlay").removeClass("d-none");
+      $("#signup-modal").removeClass("d-none");
+    }
+    
+  }
 
   ngOnInit(): void {
-    
+
     this.socialAuthService.authState.subscribe((user) => {
       this.socialUser = user;
       this.isLoggedin = (user != null);
@@ -254,10 +275,10 @@ export class HomeComponent implements OnInit {
       $("#call-modal").removeClass("d-none");
     });
 
-    $("[src='./assets/custom/images/user.svg").click(function () {
-      openOverlay();
-      $("#signup-modal").removeClass("d-none");
-    });
+    // $("[src='./assets/custom/images/user.svg").click(function () {
+    //   openOverlay();
+    //   $("#signup-modal").removeClass("d-none");
+    // });
 
     $("[data-target='#exampleModal6']").click(function () {
       $("#dark-overlay-beneath").removeClass("d-none");
@@ -275,7 +296,39 @@ export class HomeComponent implements OnInit {
   }
 
   
+public checkPassword(event:any){
 
+  if(event.target.value != ''){
+let string = event.target.value;
+let Uppercase = 0;
+let Lowercase = 0;
+for (var i = 0; i < string.length; i++)
+{
+  if (string[i] >= "A" && string[i] <= "Z"){
+    Uppercase ++;
+  }
+  if (string[i] >= "a" && string[i] <= "z"){
+    Lowercase ++;
+  }
+  if (string[i] >= "0" && string[i] <= "9"){
+    this.passwordCheck.onenumber = true;
+  }
+  if (string.length >= 8){
+    this.passwordCheck.eightormore = true;
+  }
+  if(Uppercase > 0 && Lowercase > 0){
+   this.passwordCheck.upperlower = true
+  }
+}
+
+  }
+  else{
+    this.passwordCheck.upperlower = false;
+    this.passwordCheck.eightormore = false;
+    this.passwordCheck.onenumber = false;
+  }
+
+}
   
 
 }
