@@ -17,7 +17,7 @@ export class AuthenticationService {
 
 
     constructor(private http: HttpClient, private router: Router) {
-        let token =  localStorage.getItem('CurrentUser');
+        let token =  localStorage.getItem('CurrentToken');
         this.currentUserSubject = new BehaviorSubject<any>(token != null ? JSON.parse(token): null);               
         this.currentUser = this.currentUserSubject.asObservable();
         
@@ -43,30 +43,15 @@ export class AuthenticationService {
     }
     login(requestData:any) {        
             return this.http.post<any>(environment.baseUrl +"auth-updated/token ", requestData)
-            .pipe(map(user => {                
-                console.log("calling user");
-                localStorage.setItem('CurrentUser', JSON.stringify(user));
-                this.currentUserSubject.next(user);
-                return user;
+            .pipe(map(token => {                                
+                localStorage.setItem('CurrentToken', JSON.stringify(token));
+                this.currentUserSubject.next(token);
+                return token;
         }));    
     }
 
-    
-    // login(requestData) {
-    //     return this.http.post<any>(environment.baseUrl + "user/signIn", requestData)
-    //         .pipe(map(user => {
-    //             localStorage.setItem('CurrentUser' + moment().format("DDYYYYMM"), JSON.stringify(user));
-    //             this.currentUserSubject.next(user);
-    //             return user;
-    //         }));
-    // }
-
     logout() {
-        localStorage.removeItem('CurrentUser' + moment().format("DDYYYYMM"));
-        localStorage.removeItem('CurrentUserLayoutSettings');
-        this.currentUserSubject.next(null);
-        document.body.className = '';
-        this.router.navigate(['login']);
- 
+        localStorage.clear();
+        this.router.navigate(['/']);            
     }
 }

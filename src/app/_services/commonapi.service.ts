@@ -1,13 +1,23 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from './../../environments/environment'
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject,Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 @Injectable({
   providedIn: 'root'
 })
 export class CommonApiService {
 
-  constructor(public http: HttpClient) { }
+  private currentCustomerSubject: BehaviorSubject<any>;
+  public currentCustomer: Observable<any>;
+
+  constructor(public http: HttpClient,) { 
+    let currentCustomerInfo =  localStorage.getItem('CurrentCustomerInfo');
+    this.currentCustomerSubject = new BehaviorSubject<any>(currentCustomerInfo != null ? JSON.parse(currentCustomerInfo): null);               
+    this.currentCustomer = this.currentCustomerSubject.asObservable();
+
+  }
   public reloadList: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
   postRequest(url:any, requestData:any) {
@@ -41,6 +51,15 @@ export class CommonApiService {
 
   fileDownload(url:any) {
     return this.http.get<Blob>(environment.baseUrl + url , { responseType: 'blob' as 'json' });
+  }
+
+
+  getCurrentUserInfo() {
+    return this.http.get<any>(environment.baseUrl + "customer/v1/get-customer-info").pipe(map(res => {                                
+          localStorage.setItem('CurrentCustomerInfo', JSON.stringify(res.data));
+          this.currentCustomerSubject.next(res.data);
+          return res.data;
+    }));     
   }
 
   

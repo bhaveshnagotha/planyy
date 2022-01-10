@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { constants, CustomValidator } from 'src/app/_constants';
 
-import { AuthenticationService } from 'src/app/_services';
+import { AuthenticationService, CommonApiService } from 'src/app/_services';
 import { first } from 'rxjs/operators';
 import { SocialAuthService, GoogleLoginProvider, SocialUser } from 'angularx-social-login';
 import { ToastrService } from 'ngx-toastr';
-
+import { Router } from '@angular/router';
 
 declare var Swiper: any;
 declare var $: any;
@@ -35,9 +35,16 @@ export class HomeComponent implements OnInit {
   sessionActive:boolean = true;  
   
 
-  signupform:boolean = false
+  signupform:boolean = false;
 
-  constructor(private toastr: ToastrService, public authenticationService: AuthenticationService,public fb: FormBuilder,private socialAuthService: SocialAuthService) { }
+  customerID:number = 0;
+
+  constructor(private toastr: ToastrService, 
+    public authenticationService: AuthenticationService,
+    public fb: FormBuilder,
+    private socialAuthService: SocialAuthService,
+    private commonApiService:CommonApiService,
+    public router: Router) { }
 
   signUp() {
     
@@ -50,8 +57,7 @@ export class HomeComponent implements OnInit {
       "data": this.signUpForm.value
     }]
     
-    this.authenticationService.signup(data[0]).pipe(first()).subscribe(data => {
-        console.log(data);
+    this.authenticationService.signup(data[0]).pipe(first()).subscribe(data => {        
         this.signUpForm.reset();
         this.toastr.success('Customer Created Successfully', 'Success');
     },err => {      
@@ -65,11 +71,37 @@ export class HomeComponent implements OnInit {
       return;
     }    
     this.authenticationService.login(this.signInForm.value).pipe(first()).subscribe(data => {        
-        this.signInForm.reset();        
-        this.toastr.success("Token generated Successfully", 'Success');        
+        this.signInForm.reset();  
+        this.getCurrentUserInfo();          
+        this.router.navigate(['service']);    
+        this.toastr.success("Welcome back!", 'Success');        
     });    
   } 
 
+
+  
+
+  getCurrentUserInfo() {    
+    this.commonApiService.getCurrentUserInfo().pipe(first())
+      .subscribe(
+        response => {
+          localStorage.setItem('CustomerInfo', JSON.stringify(response.data));          
+        });
+  }
+
+
+  logOut(str:string) {
+    this.customerID = 0;    
+    this.authenticationService.logout();  
+
+    if(str == 'rightsidebtn'){
+      $("#dark-overlay-beneath").addClass("d-none");
+      $("#right-menu").addClass("d-none");
+    }
+
+    this.toastr.success('Logout Successfully', 'Success');
+  }
+  
   requestCall() {
     if (this.requestCallForm.invalid) {
       console.log("false")
@@ -104,9 +136,9 @@ export class HomeComponent implements OnInit {
     this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
   }
 
-  logOut(): void {
-    this.socialAuthService.signOut();
-  }
+  // logOut(): void {
+  //   this.socialAuthService.signOut();
+  // }
 
   openSignupPopUp(str:string){    
     
@@ -129,6 +161,9 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    let cId =  localStorage.getItem('CurrentCustomerInfo');
+    this.customerID = JSON.parse(cId != null ? JSON.parse(cId)["idCustomer"]: 0);
 
     this.socialAuthService.authState.subscribe((user) => {
       this.socialUser = user;

@@ -665,10 +665,10 @@
     </div>
 
     <div class="bottom-btn">
-      <button (click)="openSignupPopUp('rightsidebtn')" class="btn btn-bg-primary signup fs-24 fs-1919-16" *ngIf="sessionActive">
+      <button (click)="openSignupPopUp('rightsidebtn')" class="btn btn-bg-primary signup fs-24 fs-1919-16" *ngIf="customerID == 0">
         Sign Up
       </button>
-      <button class="btn btn-bg-primary signup fs-24 fs-1919-16" *ngIf="!sessionActive">
+      <button (click)="logOut('rightsidebtn')" class="btn btn-bg-primary signup fs-24 fs-1919-16" *ngIf="customerID > 0">
         Logout
       </button>
     </div>
@@ -1042,7 +1042,7 @@
       <a data-toggle="modal" data-target="#exampleModal6">        
         <img height="24px" width="24px" src="./assets/custom/vector/menu-new.svg" alt="menu" />
       </a>
-      <a class="smo" *ngIf="sessionActive" (click)="openSignupPopUp('header')">
+      <a class="smo" *ngIf="customerID == 0" (click)="openSignupPopUp('header')">
         <img src="./assets/custom/images/user.svg" />
       </a>
     </div>
@@ -1069,19 +1069,19 @@
   <div class="swiper-container mySwiper">
     <div class="swiper-wrapper">
       <div class="swiper-slide">
-        <!-- <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
+        <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
           src="./assets/custom/images/mobile_slider.jpg" /><img src="./assets/custom/images/ipad_slider.jpg" /><img
-          src="./assets/custom/images/Cover_Push_auto_1920.jpg" /> -->
+          src="./assets/custom/images/Cover_Push_auto_1920.jpg" />
       </div>
       <div class="swiper-slide">
-        <!-- <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
+        <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
           src="./assets/custom/images/mobile_slider.jpg" /><img src="./assets/custom/images/ipad_slider.jpg" /><img
-          src="./assets/custom/images/Cover_Push_auto_1920.jpg" /> -->
+          src="./assets/custom/images/Cover_Push_auto_1920.jpg" />
       </div>
       <div class="swiper-slide">
-        <!-- <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
+        <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
           src="./assets/custom/images/mobile_slider.jpg" /><img src="./assets/custom/images/ipad_slider.jpg" /><img
-          src="./assets/custom/images/Cover_Push_auto_1920.jpg" /> -->
+          src="./assets/custom/images/Cover_Push_auto_1920.jpg" />
       </div>
     </div>
     <div class="swiper-pagination"></div>
