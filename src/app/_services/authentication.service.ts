@@ -17,11 +17,15 @@ export class AuthenticationService {
 
 
     constructor(private http: HttpClient, private router: Router) {
-        this.currentUserSubject = new BehaviorSubject<any>(localStorage.getItem('HRCurrentUser' + moment().format("DDYYYYMM")));
+        let token =  localStorage.getItem('CurrentUser');
+        this.currentUserSubject = new BehaviorSubject<any>(token != null ? JSON.parse(token): null);               
         this.currentUser = this.currentUserSubject.asObservable();
+        
     }
 
     public get currentUserValue() {
+        // console.log("get constructor") 
+        // console.log(this.currentUserSubject.value.token);
         return this.currentUserSubject.value;
     }
 
@@ -31,18 +35,17 @@ export class AuthenticationService {
     getRoleName(){
         return this.currentUserValue["data"]["role"];
     }
-// https://api.planyy.com:8067/v1/register-customer
     signup(requestData:any) {
-            return this.http.post<any>("https://api.planyy.com:8067/customer/v1/register-customer", requestData)
+            return this.http.post<any>(environment.baseUrl +"customer/v1/register-customer", requestData)
             .pipe(map(user => {                
                 return user;
         }));    
     }
-
-    login(requestData:any) {
-            return this.http.post<any>("https://api.planyy.com:8067/auth-updated/token ", requestData)
-            .pipe(map(user => {
-                localStorage.setItem('HRCurrentUser' + moment().format("DDYYYYMM"), JSON.stringify(user));
+    login(requestData:any) {        
+            return this.http.post<any>(environment.baseUrl +"auth-updated/token ", requestData)
+            .pipe(map(user => {                
+                console.log("calling user");
+                localStorage.setItem('CurrentUser', JSON.stringify(user));
                 this.currentUserSubject.next(user);
                 return user;
         }));    
@@ -52,15 +55,15 @@ export class AuthenticationService {
     // login(requestData) {
     //     return this.http.post<any>(environment.baseUrl + "user/signIn", requestData)
     //         .pipe(map(user => {
-    //             localStorage.setItem('HRCurrentUser' + moment().format("DDYYYYMM"), JSON.stringify(user));
+    //             localStorage.setItem('CurrentUser' + moment().format("DDYYYYMM"), JSON.stringify(user));
     //             this.currentUserSubject.next(user);
     //             return user;
     //         }));
     // }
 
     logout() {
-        localStorage.removeItem('HRCurrentUser' + moment().format("DDYYYYMM"));
-        localStorage.removeItem('HRCurrentUserLayoutSettings');
+        localStorage.removeItem('CurrentUser' + moment().format("DDYYYYMM"));
+        localStorage.removeItem('CurrentUserLayoutSettings');
         this.currentUserSubject.next(null);
         document.body.className = '';
         this.router.navigate(['login']);

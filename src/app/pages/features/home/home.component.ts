@@ -61,17 +61,11 @@ export class HomeComponent implements OnInit {
   signIn() {
     if (this.signInForm.invalid) {    
       return;
-    }
-    this.authenticationService.login(this.signInForm.value).pipe(first()).subscribe(data => {
-        console.log(data);
-        this.signInForm.reset();
-        this.toastr.success("Token generated Successfully", 'Success');
-        // this.signUpForm.reset();
-        // this.toastr.success('Customer Created Successfully', 'Success');
-    },err => {      
-      this.toastr.error(err.error.message, 'Error');
-    });
-    
+    }    
+    this.authenticationService.login(this.signInForm.value).pipe(first()).subscribe(data => {        
+        this.signInForm.reset();        
+        this.toastr.success("Token generated Successfully", 'Success');        
+    });    
   } 
 
   requestCall() {

@@ -16,6 +16,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 
 import { SwiperModule } from 'swiper/angular';
+import { JwtInterceptor, ErrorInterceptor } from './_helpers';
 
 
 
@@ -39,6 +40,8 @@ import { SwiperModule } from 'swiper/angular';
     //LayoutRoutingModule
   ],
   providers: [
+  { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+  { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   {
       provide: 'SocialAuthServiceConfig',
       useValue: {
