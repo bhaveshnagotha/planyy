@@ -821,12 +821,12 @@
             <form id="signup-frm" [formGroup]="signUpForm" (ngSubmit)="signUp()">
 
                 <div class="custom-form-control pt-3 with-helper" [class]="(signUpForm.get('email').invalid && signUpForm.get('email').touched) ? 'error':''">
-                    <input class="custom-input" id="email" type="text" formControlName="email" autocomplete="off" placeholder="Email"/>
-                    <app-show-error [field]="signUpForm.get('email')" [name]="'Email'"></app-show-error>                    
+                    <input class="custom-input" id="email" type="text" formControlName="email" autocomplete="off" placeholder="Email Address"/>
+                    <app-show-error [field]="signUpForm.get('email')" [name]="'Email Address'"></app-show-error>                    
                 </div>
                 <div class="custom-form-control mt-4 with-helper" [class]="(signUpForm.get('mobileNumber').invalid && signUpForm.get('mobileNumber').touched) ? 'error':''">
-                    <input class="custom-input" type="text" formControlName="mobileNumber" autocomplete="off" placeholder="Number" />
-                    <app-show-error [field]="signUpForm.get('mobileNumber')" [name]="'Number'"></app-show-error>
+                    <input class="custom-input" type="text" formControlName="mobileNumber" autocomplete="off" placeholder="Mobile Number" />
+                    <app-show-error [field]="signUpForm.get('mobileNumber')" [name]="'Mobile Number'"></app-show-error>
                 </div>
                 <div class="custom-form-control mt-4 pwd-container">
                     <!-- <div class="custom-tooltip password">
@@ -873,7 +873,7 @@
                     </div>
                 </div>
                 <div class="custom-form-control mt-4 with-helper" [class]="(signUpForm.get('confirmPassword').invalid && signUpForm.get('confirmPassword').touched) ? 'error':''">
-                    <input class="custom-input" type="password" formControlName="confirmPassword" autocomplete="off" placeholder="Confirm Your Password" />
+                    <input class="custom-input" type="password" formControlName="confirmPassword" autocomplete="off" placeholder="Confirm Password" />
                     <app-show-error [field]="signUpForm.get('confirmPassword')" [name]="'Confirm Password'"></app-show-error>
                 </div>
                   <div class="
@@ -887,7 +887,7 @@
                       Sign up
                     </button>
                     <span class="my-2 fs-14 my-sm-0 d-sm-inline d-block"> or </span>
-                    <button class="btn btn-rounded">
+                    <button class="btn btn-rounded" (click)="loginWithGoogle()">
                       <img class="mr-2" src="./assets/custom/images/google.svg" alt="google" />
                       Google
                     </button>
@@ -907,14 +907,14 @@
             </h2>
             <form id="signin-frm" [formGroup]="signInForm" (ngSubmit)="signIn()">
 
-                <div class="custom-form-control pt-3 with-helper" [class]="(signInForm.get('email_mobile').invalid && signInForm.get('email_mobile').touched) ? 'error':''">
-                    <input class="custom-input" id="email_mobile" type="text" formControlName="email_mobile" autocomplete="off" placeholder="Email"/>
-                    <app-show-error [field]="signInForm.get('email_mobile')" [name]="'Email or Mobile'"></app-show-error>                    
+                <div class="custom-form-control pt-3 with-helper" [class]="(signInForm.get('username').invalid && signInForm.get('username').touched) ? 'error':''">
+                    <input class="custom-input" id="username" type="text" formControlName="username" autocomplete="off" placeholder="Enter Your Mobile No/Email"/>
+                    <app-show-error [field]="signInForm.get('username')" [name]="'Mobile or Email'"></app-show-error>                    
                 </div>                
                 <div class="custom-form-control mt-4 pwd-container">                   
                     <div class="with-icon">
                         <div class="custom-form-control mt-4 with-helper" [class]="(signInForm.get('password').invalid && signInForm.get('password').touched) ? 'error':''">
-                            <input class="custom-input" type="password" formControlName="password" autocomplete="off" placeholder="Password" />
+                            <input class="custom-input" type="password" formControlName="password" autocomplete="off" placeholder="Enter Your Password" />
                             <app-show-error [field]="signInForm.get('password')" [name]="'Password'"></app-show-error>
                         </div>
                         
@@ -924,7 +924,13 @@
                 <div class="fs-16 mt-sm-3 mt-2 text-center text-md-right">                    
                   <a href="#" >Forgot password?</a>
                 </div>
-                
+
+                <!-- <div *ngIf="isLoggedin === false">
+                  <div>
+                    <button type="button" (click)="loginWithGoogle()" class="btn btn-danger">Login with Google</button>
+                  </div>
+                </div>
+                 -->
                 <div class="
                     d-flex
                     flex-sm-row flex-column
@@ -936,7 +942,7 @@
                     Sign in
                 </button>
                 <span class="my-2 fs-14 my-sm-0 d-sm-inline d-block"> or </span>
-                <button class="btn btn-rounded">
+                <button class="btn btn-rounded" (click)="loginWithGoogle()">
                     <img class="mr-2" src="./assets/custom/images/google.svg" alt="google" />
                     Google
                 </button>
@@ -1052,24 +1058,24 @@
       <a class="with-border" href="#"><img src="./assets/custom/images/message.svg" /></a>
       <a href="#"><img src="./assets/custom/images/call.svg" /></a>
     </div>
-  </div>
+  </div>  
 
   <div class="swiper-container mySwiper">
     <div class="swiper-wrapper">
       <div class="swiper-slide">
-        <!-- <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
+        <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
           src="./assets/custom/images/mobile_slider.jpg" /><img src="./assets/custom/images/ipad_slider.jpg" /><img
-          src="./assets/custom/images/Cover_Push_auto_1920.jpg" /> -->
+          src="./assets/custom/images/Cover_Push_auto_1920.jpg" />
       </div>
       <div class="swiper-slide">
-        <!-- <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
+        <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
           src="./assets/custom/images/mobile_slider.jpg" /><img src="./assets/custom/images/ipad_slider.jpg" /><img
-          src="./assets/custom/images/Cover_Push_auto_1920.jpg" /> -->
+          src="./assets/custom/images/Cover_Push_auto_1920.jpg" />
       </div>
       <div class="swiper-slide">
-        <!-- <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
+        <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
           src="./assets/custom/images/mobile_slider.jpg" /><img src="./assets/custom/images/ipad_slider.jpg" /><img
-          src="./assets/custom/images/Cover_Push_auto_1920.jpg" /> -->
+          src="./assets/custom/images/Cover_Push_auto_1920.jpg" />
       </div>
     </div>
     <div class="swiper-pagination"></div>

@@ -1,0 +1,274 @@
+{
+    "app_Mobile_Accessibility_Global": [{
+            "id": "fixedHeader",
+            "title": "Fixed Header",
+            "subtitle": "header is in a fixed at all times",
+            "value": true,
+            "disabled": false
+        },
+        {
+            "id": "fixedNavigation",
+            "title": "Fixed Navigation",
+            "subtitle": "left panel is fixed",
+            "value": false,
+            "disabled": false
+        },
+        {
+            "id": "minifyNavigation",
+            "title": "Minify Navigation",
+            "subtitle": "skew nav to maximize space",
+            "value": false,
+            "disabled": false
+        },
+        {
+            "id": "hideNavigation",
+            "title": "Hide Navigation",
+            "subtitle": "roll mouse on edge to reveal",
+            "value": false,
+            "disabled": false
+        },
+        {
+            "id": "topNavigation",
+            "title": "Top Navigation",
+            "subtitle": "relocate left pane to top",
+            "value": false,
+            "disabled": false
+        },
+        {
+            "id": "fixedFooter",
+            "title": "Fixed Footer",
+            "subtitle": "page footer is fixed",
+            "value": true,
+            "disabled": false
+        },
+        {
+            "id": "boxedLayout",
+            "title": "Boxed Layout",
+            "subtitle": "encapsulates to a container",
+            "value": false,
+            "disabled": false
+        },
+        {
+            "id": "pushContent",
+            "title": "Push Content",
+            "subtitle": "content pushed on menu reveal",
+            "value": false,
+            "disabled": false
+        },
+        {
+            "id": "noOverlay",
+            "title": "No Overlay",
+            "subtitle": "removes mesh on menu reveal",
+            "value": false,
+            "disabled": false
+        },
+        {
+            "id": "offCanvas",
+            "title": "Off-Canvas(beta)",
+            "subtitle": "content overlaps menu",
+            "value": false,
+            "disabled": false
+        },
+        {
+            "id": "biggerContentFont",
+            "title": "Bigger Content Font",
+            "subtitle": "content fonts are bigger for readability",
+            "value": false,
+            "disabled": false
+        },
+        {
+            "id": "highContrastText",
+            "title": "High Contrast Text (WCAG 2 AA)",
+            "subtitle": "4.5:1 text contrast ratio",
+            "value": false,
+            "disabled": false
+        },
+        {
+            "id": "daltonism",
+            "title": "Daltonism(beta)",
+            "subtitle": "color vision deficiency",
+            "value": false,
+            "disabled": false
+        },
+        {
+            "id": "preloaderInside",
+            "title": "Preloader Inside",
+            "subtitle": "preloader will be inside content",
+            "value": false,
+            "disabled": false
+        },
+        {
+            "id": "smartPanelIcons",
+            "title": "SmartPanel Icons (not Panels)",
+            "subtitle": "smartpanel buttons will appear as icons",
+            "value": false,
+            "disabled": false
+        },
+        {
+            "id": "cleanPageBackground",
+            "title": "Clean Page Background",
+            "subtitle": "adds more whitespace",
+            "value": false,
+            "disabled": false
+        },
+        {
+            "id": "hideNavigationIcons",
+            "title": "Hide Navigation Icons",
+            "subtitle": "invisible navigation icons",
+            "value": false,
+            "disabled": false
+        },
+        {
+            "id": "disableCSSAnimation",
+            "title": "Disable CSS Animation",
+            "subtitle": "disables css based animations",
+            "value": false,
+            "disabled": false
+        },
+        {
+            "id": "hideInfoCard",
+            "title": "Hide Info Card",
+            "subtitle": "hides info card from left panel",
+            "value": false,
+            "disabled": false
+        },
+        {
+            "id": "leanSubheader",
+            "title": "Lean Subheader",
+            "subtitle": "distinguished page header",
+            "value": false,
+            "disabled": false
+        },
+        {
+            "id": "hierarchicalNavigation",
+            "title": "Hierarchical Navigation",
+            "subtitle": "clear breakdown of nav links",
+            "value": true,
+            "disabled": false
+        },
+        {
+            "id": "darkNavigation",
+            "title": "Dark Navigation",
+            "subtitle": "navigation background is darkend",
+            "value": true,
+            "disabled": false
+        }
+    ],
+
+    "boxedLayout": [{
+            "id": "modbg1",
+            "value": false
+        },
+        {
+            "id": "modbg2",
+            "value": false
+        },
+        {
+            "id": "modbg3",
+            "value": false
+        },
+        {
+            "id": "modbg4",
+            "value": false
+        },
+        {
+            "id": "modbgnone",
+            "value": true
+        },
+        {
+            "id": "fixedBackground",
+            "value": true
+        }
+    ],
+    "globalFontSize": [{
+            "id": "SM",
+            "value": false
+        },
+        {
+            "id": "MD",
+            "value": true
+        },
+        {
+            "id": "LG",
+            "value": false
+        },
+        {
+            "id": "XL",
+            "value": false
+        }
+    ],
+    "themeColors": [{
+            "id": "theme1",
+            "value": false
+        },
+        {
+            "id": "theme2",
+            "value": false
+        },
+        {
+            "id": "theme3",
+            "value": true
+        },
+        {
+            "id": "theme4",
+            "value": false
+        },
+        {
+            "id": "theme5",
+            "value": false
+        },
+        {
+            "id": "theme6",
+            "value": false
+        },
+        {
+            "id": "theme7",
+            "value": false
+        },
+        {
+            "id": "theme8",
+            "value": false
+        },
+        {
+            "id": "theme9",
+            "value": false
+        },
+        {
+            "id": "theme10",
+            "value": false
+        },
+        {
+            "id": "theme11",
+            "value": false
+        },
+        {
+            "id": "theme12",
+            "value": false
+        },
+        {
+            "id": "theme13",
+            "value": false
+        },
+        {
+            "id": "theme14",
+            "value": false
+        },
+        {
+            "id": "theme15",
+            "value": false
+        }
+    ],
+    "themeModes": [{
+            "id": "Default",
+            "value": true
+        },
+        {
+            "id": "Light",
+            "value": false
+        },
+        {
+            "id": "Dark",
+            "value": false
+        }
+    ]
+}

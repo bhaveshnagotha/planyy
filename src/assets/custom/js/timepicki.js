@@ -56,14 +56,14 @@
       // developer can specify which arrow makes the numbers go up or down
       var top_arrow_button =
         settings.increase_direction === "down"
-          ? "<div class='prev action-prev'><img src='./assets/vector/time-up.svg' /></div>"
+          ? "<div class='prev action-prev'><img src='./assets/custom/vector/time-up.svg' /></div>"
           : `<div class='prev action-next'>
-					<img src='./assets/vector/time-up.svg' />
+					<img src='./assets/custom/vector/time-up.svg' />
 				</div>`;
       var bottom_arrow_button =
         settings.increase_direction === "down"
-          ? "<div class='next action-next'><img src='./assets/vector/time-down.svg' /></div>"
-          : "<div class='next action-prev'><img src='./assets/vector/time-down.svg' /></div>";
+          ? "<div class='next action-next'><img src='./assets/custom/vector/time-down.svg' /></div>"
+          : "<div class='next action-prev'><img src='./assets/custom/vector/time-down.svg' /></div>";
 
       var new_ele = $(
         "<div class='timepicker_wrap " +

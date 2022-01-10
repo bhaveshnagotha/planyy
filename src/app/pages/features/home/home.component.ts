@@ -1,6 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { constants, CustomValidator } from 'src/app/_constants';
+
+import { AuthenticationService } from 'src/app/_services';
+import { first } from 'rxjs/operators';
+import { SocialAuthService, GoogleLoginProvider, SocialUser } from 'angularx-social-login';
+import { ToastrService } from 'ngx-toastr';
+
+
+declare var Swiper: any;
 declare var $: any;
 
 @Component({
@@ -15,29 +23,55 @@ export class HomeComponent implements OnInit {
   signInForm:any = FormGroup;
   requestCallForm:any = FormGroup;
   sentMsgForm:any = FormGroup;
+
+
+  socialUser:any = SocialUser;
+  isLoggedin:boolean = false; 
   
 
 
   signupform:boolean = false
 
-  constructor(public fb: FormBuilder) { }
+  constructor(private toastr: ToastrService, public authenticationService: AuthenticationService,public fb: FormBuilder,private socialAuthService: SocialAuthService) { }
 
   signUp() {
     
-    if (this.signUpForm.invalid) {
-      console.log("false")
+    if (this.signUpForm.invalid) {      
       return;
     }
-    console.log(this.signUpForm.value)
+
+
+    var data = [{
+      "data": this.signUpForm.value
+    }]
+  
+    
+    console.log(this.signUpForm.value)    
+    
+    this.authenticationService.signup(data[0]).pipe(first()).subscribe(data => {
+        console.log(data);
+        this.signUpForm.reset();
+        this.toastr.success('Customer Created Successfully', 'Success');
+    },err => {      
+      this.toastr.error(err.error.message, 'Error');
+    });   
     
   } 
 
   signIn() {
-    if (this.signInForm.invalid) {
-      console.log("false")
+    if (this.signInForm.invalid) {    
       return;
     }
-    console.log("true")
+    this.authenticationService.login(this.signInForm.value).pipe(first()).subscribe(data => {
+        console.log(data);
+        this.signInForm.reset();
+        this.toastr.success("Token generated Successfully", 'Success');
+        // this.signUpForm.reset();
+        // this.toastr.success('Customer Created Successfully', 'Success');
+    },err => {      
+      this.toastr.error(err.error.message, 'Error');
+    });
+    
   } 
 
   requestCall() {
@@ -70,15 +104,30 @@ export class HomeComponent implements OnInit {
   }
 
 
-  ngOnInit(): void {
+  loginWithGoogle(): void {    
+    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
+  }
 
+  logOut(): void {
+    this.socialAuthService.signOut();
+  }
+
+
+  ngOnInit(): void {
+    
+    this.socialAuthService.authState.subscribe((user) => {
+      this.socialUser = user;
+      this.isLoggedin = (user != null);
+      console.log("social Auth");
+      console.log(this.socialUser);
+    });
 
     
 
 
     this.signUpForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      mobileNumber: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
+      mobileNumber: ['', [Validators.required, Validators.pattern("[0-9 ]{11}")]],
       password: ['', [Validators.required, CustomValidator.createPasswordStrengthValidator()]],
       confirmPassword: ['']
     }
@@ -88,21 +137,21 @@ export class HomeComponent implements OnInit {
 
 
     this.signInForm = this.fb.group({
-      email_mobile: ['', [Validators.required]],     
+      username: ['', [Validators.required]],     
       password: ['', [Validators.required]],      
     });
 
 
     this.requestCallForm = this.fb.group({
       name: ['', [Validators.required]],     
-      mobile_number: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],      
+      mobile_number: ['', [Validators.required, Validators.pattern("[0-9 ]{11}")]],      
       date: ['', [Validators.required]],      
       time: ['', [Validators.required]],      
     });
 
     this.sentMsgForm = this.fb.group({
       name: ['', [Validators.required]],     
-      mobile_number: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],      
+      mobile_number: ['', [Validators.required, Validators.pattern("[0-9 ]{11}")]],      
       message: ['', [Validators.required]]            
     });
 
@@ -113,11 +162,11 @@ export class HomeComponent implements OnInit {
 
     var self = this
 
-    // var swiper = new Swiper(".mySwiper", {
-    //   pagination: {
-    //     el: ".swiper-pagination",
-    //   },
-    // });
+    var swiper = new Swiper(".mySwiper", {
+      pagination: {
+        el: ".swiper-pagination",
+      },
+    });
 
 
     function checkForInput(element: any) {
@@ -183,6 +232,9 @@ export class HomeComponent implements OnInit {
     }
 
     $(".custom-modal .close").click(function () {
+      self.signupform = false
+      self.signUpForm.reset();
+      self.signInForm.reset();
       $("#dark-overlay").addClass("d-none");
     });
 
@@ -191,7 +243,7 @@ export class HomeComponent implements OnInit {
       $(".close").parent().addClass("d-none");
     });
 
-    $("#right-menu-login .close,#right-menu .close").click(function () {
+    $("#right-menu-login .close,#right-menu .close").click(function () {      
       $("#dark-overlay-beneath").addClass("d-none");
       $(self).parent().addClass("d-none");
     });
@@ -227,6 +279,8 @@ export class HomeComponent implements OnInit {
     // });
 
   }
+
+  
 
   
 

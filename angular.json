@@ -29,16 +29,22 @@
             "styles": [
               "src/assets/custom/css/style.css",
               "src/assets/custom/css/animate.compat.css",
-              "src/assets/custom/css/mc-calendar.min.css",
-              "src/assets/custom/css/utilities.css",              
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",  
+              "src/assets/custom/css/utilities.css", 
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/swiper/swiper-bundle.min.css",
+              "node_modules/chart.js/dist/Chart.css",            
               "src/styles.css"
             ],
             "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",  
               "src/assets/custom/js/common.js",
-              "src/assets/custom/js/mc-calendar.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",  
               "src/assets/custom/js/jquery.min.js",
               "src/assets/custom/js/timepicki.js",
-              "src/assets/custom/js/details.js",
+              "node_modules/swiper/swiper-bundle.min.js",
+              "node_modules/chart.js/dist/Chart.min.js"          
+              
               
               
             ]
@@ -48,13 +54,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "5mb",
+                  "maximumError": "50mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "5mb",
+                  "maximumError": "50mb"
                 }
               ],
               "fileReplacements": [

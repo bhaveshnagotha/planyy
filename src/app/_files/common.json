@@ -1,0 +1,25 @@
+{
+    "contractType": [
+        { "id": "Full time", "text": "Full time" },
+        { "id": "Part time", "text": "Part time" },
+        { "id": "Permanent", "text": "Permanent" },
+        { "id": "Temporary", "text": "Temporary" },
+        { "id": "Casual worker", "text": "Casual worker" }
+    ],
+
+    "workingDays": [
+        { "id": "mon", "text": "Monday" },
+        { "id": "tue", "text": "Tuesday" },
+        { "id": "wed", "text": "Wednesday" },
+        { "id": "thr", "text": "Thursday" },
+        { "id": "fri", "text": "Friday" },
+        { "id": "sat", "text": "Saturday" },
+        { "id": "sun", "text": "Sunday" }
+    ],
+
+    "probDurationUnit": [
+        { "id": "Day", "text": "Day" },
+        { "id": "Month", "text": "Month" },
+        { "id": "Year", "text": "Year" }
+    ]
+}
