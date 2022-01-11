@@ -1,3 +1,7 @@
-button#signup-btn:disabled, button#call-btn:disabled, button#msg-btn:disabled {
+button#signup-btn:disabled, 
+button#call-btn:disabled, 
+button#msg-btn:disabled, 
+button#mobile-otp-btn:disabled,
+button#email-otp-btn:disabled {
     cursor: not-allowed;
 }

@@ -36,7 +36,7 @@ import { JwtInterceptor, ErrorInterceptor } from './_helpers';
     SocialLoginModule,
     BrowserAnimationsModule, 
     SwiperModule,
-    ToastrModule.forRoot(), // ToastrModule added
+    ToastrModule.forRoot(), // ToastrModule added    
     //LayoutRoutingModule
   ],
   providers: [

@@ -1,138 +1,174 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { constants, CustomValidator } from 'src/app/_constants';
+import { Component, OnInit } from "@angular/core";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { constants, CustomValidator } from "src/app/_constants";
 
-import { AuthenticationService, CommonApiService } from 'src/app/_services';
-import { first } from 'rxjs/operators';
-import { SocialAuthService, GoogleLoginProvider, SocialUser } from 'angularx-social-login';
-import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { AuthenticationService, CommonApiService } from "src/app/_services";
+import { first } from "rxjs/operators";
+import {
+  SocialAuthService,
+  GoogleLoginProvider,
+  SocialUser,
+} from "angularx-social-login";
+import { ToastrService } from "ngx-toastr";
+import { Router } from "@angular/router";
 
 declare var Swiper: any;
 declare var $: any;
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  selector: "app-home",
+  templateUrl: "./home.component.html",
+  styleUrls: ["./home.component.css"],
 })
 export class HomeComponent implements OnInit {
+  signUpForm: any = FormGroup;
+  signInForm: any = FormGroup;
+  requestCallForm: any = FormGroup;
+  sentMsgForm: any = FormGroup;
 
-
-  signUpForm:any = FormGroup;
-  signInForm:any = FormGroup;
-  requestCallForm:any = FormGroup;
-  sentMsgForm:any = FormGroup;
-  passwordCheck: any ={
-    eightormore: false,
-    upperlower:false,
-    onenumber: false
-  }
-
-
-  socialUser:any = SocialUser;
-  isLoggedin:boolean = false; 
-  sessionActive:boolean = true;  
+  mobileOtpForm:any = FormGroup; 
+  emailOtpForm:any = FormGroup; 
   
 
-  signupform:boolean = false;
+  socialUser: any = SocialUser;
+  isLoggedin: boolean = false;
+  sessionActive: boolean = true;
 
-  customerID:number = 0;
+  signupform: boolean = false;
 
-  constructor(private toastr: ToastrService, 
+  customerID: number = 0;
+  signUpStoredData:any;
+
+
+  passwordCheck: any = {
+    eightormore: false,
+    upperlower: false,
+    onenumber: false,
+  };
+
+  constructor(
+    private toastr: ToastrService,
     public authenticationService: AuthenticationService,
     public fb: FormBuilder,
     private socialAuthService: SocialAuthService,
-    private commonApiService:CommonApiService,
-    public router: Router) { }
+    private commonApiService: CommonApiService,
+    public router: Router
+  ) {}
+
+  OnSubmitVerifyMobileOtp(){   
+    
+    if (this.mobileOtpForm.invalid) {
+      return;
+    }
+    $(".otp-modal-mobile").addClass("d-none");
+    $(".otp-modal-email").removeClass("d-none");
+    //console.log(this.signUpStoredData[0]['data']['email'])
+  }
+
+  OnSubmitVerifyEmailOtp(){    
+    if (this.emailOtpForm.invalid) {
+      return;
+    }    
+    this.authenticationService
+      .signup(this.signUpStoredData[0])
+      .pipe(first())
+      .subscribe(
+        (data) => {
+          this.signUpForm.reset();
+          $("#dark-overlay").addClass("d-none");
+          $(".otp-modal-email").addClass("d-none");
+          this.toastr.success("Customer Created Successfully", "Success");
+        }
+    );
+    
+    
+    //console.log(this.signUpStoredData[0]['data']['email'])
+  }
 
   signUp() {
-    
-    if (this.signUpForm.invalid) {      
+    if (this.signUpForm.invalid) {
       return;
     }
 
+    let signUpFrmData = [];
 
-    var data = [{
-      "data": this.signUpForm.value
-    }]
+    var data = 
+    {
+      data: this.signUpForm.value,
+    }
+    signUpFrmData.push(data);
+    this.signUpStoredData = signUpFrmData;    
     
-    this.authenticationService.signup(data[0]).pipe(first()).subscribe(data => {        
-        this.signUpForm.reset();
-        this.toastr.success('Customer Created Successfully', 'Success');
-    },err => {      
-      this.toastr.error(err.error.message, 'Error');
-    });   
+    $("#dark-overlay").removeClass("d-none");
+    $("#signup-modal").addClass("d-none");
+    $(".otp-modal-mobile").removeClass("d-none");
     
-  } 
-
-  signIn() {
-    if (this.signInForm.invalid) {    
-      return;
-    }    
-    this.authenticationService.login(this.signInForm.value).pipe(first()).subscribe(data => {        
-        this.signInForm.reset();  
-        this.getCurrentUserInfo();          
-        this.router.navigate(['service']);    
-        this.toastr.success("Welcome back!", 'Success');        
-    });    
-  } 
-
-
-  
-
-  getCurrentUserInfo() {    
-    this.commonApiService.getCurrentUserInfo().pipe(first())
-      .subscribe(
-        response => {
-          localStorage.setItem('CustomerInfo', JSON.stringify(response.data));          
-        });
   }
 
+  signIn() {
+    if (this.signInForm.invalid) {
+      return;
+    }
+    this.authenticationService
+      .login(this.signInForm.value)
+      .pipe(first())
+      .subscribe((data) => {
+        this.signInForm.reset();
+        this.getCurrentUserInfo();
+        this.router.navigate(["service"]);
+        this.toastr.success("Welcome back!", "Success");
+      });
+  }
 
-  logOut(str:string) {
-    this.customerID = 0;    
-    this.authenticationService.logout();  
+  getCurrentUserInfo() {
+    this.commonApiService
+      .getCurrentUserInfo()
+      .pipe(first())
+      .subscribe((response) => {
+        localStorage.setItem("CustomerInfo", JSON.stringify(response.data));
+      });
+  }
 
-    if(str == 'rightsidebtn'){
+  logOut(str: string) {
+    this.customerID = 0;
+    this.authenticationService.logout();
+
+    if (str == "rightsidebtn") {
       $("#dark-overlay-beneath").addClass("d-none");
       $("#right-menu").addClass("d-none");
     }
 
-    this.toastr.success('Logout Successfully', 'Success');
+    this.toastr.success("Logout Successfully", "Success");
   }
-  
+
   requestCall() {
     if (this.requestCallForm.invalid) {
-      console.log("false")
+      console.log("false");
       return;
     }
-    console.log("true")
+    console.log("true");
   }
-  
+
   sentMessage() {
     if (this.sentMsgForm.invalid) {
-      console.log("false")
+      console.log("false");
       return;
     }
-    console.log("true")
+    console.log("true");
   }
 
-  showForm(e:string){
+  showForm(e: string) {
     this.signUpForm.reset();
     this.signInForm.reset();
-    
-    if(e == 'signin'){
-      this.signupform = false
-      
-    }else{
-      this.signupform = true
-    }
 
+    if (e == "signin") {
+      this.signupform = false;
+    } else {
+      this.signupform = true;
+    }
   }
 
-
-  loginWithGoogle(): void {    
+  loginWithGoogle(): void {
     this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
   }
 
@@ -140,84 +176,105 @@ export class HomeComponent implements OnInit {
   //   this.socialAuthService.signOut();
   // }
 
-  openSignupPopUp(str:string){    
-    
-    if(str == 'header'){
+  openSignupPopUp(str: string) {
+    if (str == "header") {
       this.signupform = false;
       $("#dark-overlay").removeClass("d-none");
       $("#signup-modal").removeClass("d-none");
     }
-    
-    if(str == 'rightsidebtn'){
-
+    if (str == "rightsidebtn") {
       $("#dark-overlay-beneath").addClass("d-none");
       $("#right-menu").addClass("d-none");
-  
+
       this.signupform = true;
       $("#dark-overlay").removeClass("d-none");
       $("#signup-modal").removeClass("d-none");
     }
-    
   }
 
   ngOnInit(): void {
-
-    let cId =  localStorage.getItem('CurrentCustomerInfo');
-    this.customerID = JSON.parse(cId != null ? JSON.parse(cId)["idCustomer"]: 0);
+    let cId = localStorage.getItem("CurrentCustomerInfo");
+    this.customerID = JSON.parse(
+      cId != null ? JSON.parse(cId)["idCustomer"] : 0
+    );
 
     this.socialAuthService.authState.subscribe((user) => {
       this.socialUser = user;
-      this.isLoggedin = (user != null);
+      this.isLoggedin = user != null;
       console.log("social Auth");
       console.log(this.socialUser);
     });
 
-    
+    this.mobileOtpForm = this.fb.group(
+      {
+        first_val: ["", [Validators.required]],
+        second_val: ["", [Validators.required]],
+        third_val: ["", [Validators.required]],
+        fourth_val: ["", [Validators.required]]
+      }
+    );
 
+    this.emailOtpForm = this.fb.group(
+      {
+        first_val: ["", [Validators.required]],
+        second_val: ["", [Validators.required]],
+        third_val: ["", [Validators.required]],
+        fourth_val: ["", [Validators.required]]
+      }
+    );
 
-    this.signUpForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      mobileNumber: ['', [Validators.required, Validators.pattern("[0-9 ]{11}")]],
-      password: ['', [Validators.required, CustomValidator.createPasswordStrengthValidator()]],
-      confirmPassword: ['']
-    }
-    , { 
-      validator: CustomValidator.mustMatch('password', 'confirmPassword')     
-    })   
-
+    this.signUpForm = this.fb.group(
+      {
+        email: ["", [Validators.required, Validators.email]],
+        mobileNumber: [
+          "",
+          [Validators.required, Validators.pattern("[0-9 ]{10}")],
+        ],
+        password: [
+          "",
+          [
+            Validators.required,
+            CustomValidator.createPasswordStrengthValidator(),
+          ],
+        ],
+        confirmPassword: [""],
+      },
+      {
+        validator: CustomValidator.mustMatch("password", "confirmPassword"),
+      }
+    );
 
     this.signInForm = this.fb.group({
-      username: ['', [Validators.required]],     
-      password: ['', [Validators.required]],      
+      username: ["", [Validators.required]],
+      password: ["", [Validators.required]],
     });
 
-
     this.requestCallForm = this.fb.group({
-      name: ['', [Validators.required]],     
-      mobile_number: ['', [Validators.required, Validators.pattern("[0-9 ]{11}")]],      
-      date: ['', [Validators.required]],      
-      time: ['', [Validators.required]],      
+      name: ["", [Validators.required]],
+      mobile_number: [
+        "",
+        [Validators.required, Validators.pattern("[0-9 ]{10}")],
+      ],
+      date: ["", [Validators.required]],
+      time: ["", [Validators.required]],
     });
 
     this.sentMsgForm = this.fb.group({
-      name: ['', [Validators.required]],     
-      mobile_number: ['', [Validators.required, Validators.pattern("[0-9 ]{11}")]],      
-      message: ['', [Validators.required]]            
+      name: ["", [Validators.required]],
+      mobile_number: [
+        "",
+        [Validators.required, Validators.pattern("[0-9 ]{10}")],
+      ],
+      message: ["", [Validators.required]],
     });
 
-
-    
-
-
-
-    var self = this
+    var self = this;
 
     var swiper = new Swiper(".mySwiper", {
       pagination: {
         el: ".swiper-pagination",
       },
     });
-
 
     function checkForInput(element: any) {
       // element is passed to the function ^
@@ -240,7 +297,6 @@ export class HomeComponent implements OnInit {
     $("input.textdemo").on("change keyup", function () {
       checkForInput(self);
     });
-
 
     if (window.matchMedia("(max-width: 1023px)").matches) {
       $(document).ready(function () {
@@ -268,11 +324,6 @@ export class HomeComponent implements OnInit {
       });
     }
 
-
-
-
-
-
     function openOverlay() {
       $("#dark-overlay").removeClass("d-none");
     }
@@ -282,7 +333,7 @@ export class HomeComponent implements OnInit {
     }
 
     $(".custom-modal .close").click(function () {
-      self.signupform = false
+      self.signupform = false;
       self.signUpForm.reset();
       self.signInForm.reset();
       $("#dark-overlay").addClass("d-none");
@@ -293,7 +344,7 @@ export class HomeComponent implements OnInit {
       $(".close").parent().addClass("d-none");
     });
 
-    $("#right-menu-login .close,#right-menu .close").click(function () {      
+    $("#right-menu-login .close,#right-menu .close").click(function () {
       $("#dark-overlay-beneath").addClass("d-none");
       $(self).parent().addClass("d-none");
     });
@@ -305,10 +356,12 @@ export class HomeComponent implements OnInit {
       }
     );
 
-    $(".slider_text_cont_p1 [src='./assets/custom/images/call.svg']").click(function () {
-      openOverlay();
-      $("#call-modal").removeClass("d-none");
-    });
+    $(".slider_text_cont_p1 [src='./assets/custom/images/call.svg']").click(
+      function () {
+        openOverlay();
+        $("#call-modal").removeClass("d-none");
+      }
+    );
 
     // $("[src='./assets/custom/images/user.svg").click(function () {
     //   openOverlay();
@@ -327,43 +380,34 @@ export class HomeComponent implements OnInit {
     //   $("#signup-modal").addClass("d-none");
     //   $("#otp-modal").removeClass("d-none");
     // });
-
   }
 
-  
-public checkPassword(event:any){
-
-  if(event.target.value != ''){
-let string = event.target.value;
-let Uppercase = 0;
-let Lowercase = 0;
-for (var i = 0; i < string.length; i++)
-{
-  if (string[i] >= "A" && string[i] <= "Z"){
-    Uppercase ++;
+  checkPassword(event: any) {
+    if (event.target.value != "") {
+      let string = event.target.value;
+      let Uppercase = 0;
+      let Lowercase = 0;
+      for (var i = 0; i < string.length; i++) {
+        if (string[i] >= "A" && string[i] <= "Z") {
+          Uppercase++;
+        }
+        if (string[i] >= "a" && string[i] <= "z") {
+          Lowercase++;
+        }
+        if (string[i] >= "0" && string[i] <= "9") {
+          this.passwordCheck.onenumber = true;
+        }
+        if (string.length >= 8) {
+          this.passwordCheck.eightormore = true;
+        }
+        if (Uppercase > 0 && Lowercase > 0) {
+          this.passwordCheck.upperlower = true;
+        }
+      }
+    } else {
+      this.passwordCheck.upperlower = false;
+      this.passwordCheck.eightormore = false;
+      this.passwordCheck.onenumber = false;
+    }
   }
-  if (string[i] >= "a" && string[i] <= "z"){
-    Lowercase ++;
-  }
-  if (string[i] >= "0" && string[i] <= "9"){
-    this.passwordCheck.onenumber = true;
-  }
-  if (string.length >= 8){
-    this.passwordCheck.eightormore = true;
-  }
-  if(Uppercase > 0 && Lowercase > 0){
-   this.passwordCheck.upperlower = true
-  }
-}
-
-  }
-  else{
-    this.passwordCheck.upperlower = false;
-    this.passwordCheck.eightormore = false;
-    this.passwordCheck.onenumber = false;
-  }
-
-}
-  
-
 }

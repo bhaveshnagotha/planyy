@@ -966,7 +966,7 @@
       </div>
     </div>
   </div>
-  <div class="custom-modal md d-none" id="otp-modal">
+  <div class="custom-modal md d-none otp-modal-mobile" id="otp-modal">
     <div class="close">
       <img src="./assets/custom/images/close.svg" alt="close" />
     </div>
@@ -997,20 +997,22 @@
             <div class="form">
               <div class="otp-boxes mt-3">
                 <div class="container p-0">
-                  <div class="row">
-                    <div class="col-3">
-                      <input type="text" placeholder="0" value="3" class="custom-input active" />
+                  <form id="mobile-otp-frm" [formGroup]="mobileOtpForm">
+                    <div class="row">
+                      <div class="col-3">
+                        <input type="text" mask="0" formControlName="first_val" placeholder="0" class="custom-input active" />
+                      </div>
+                      <div class="col-3">
+                        <input type="text" mask="0" formControlName="second_val" placeholder="0" class="custom-input" />
+                      </div>
+                      <div class="col-3">
+                        <input type="text" mask="0" formControlName="third_val" placeholder="0" class="custom-input" />
+                      </div>
+                      <div class="col-3">
+                        <input type="text" mask="0" formControlName="fourth_val" placeholder="0" class="custom-input"/>
+                      </div>
                     </div>
-                    <div class="col-3">
-                      <input type="text" placeholder="0" class="custom-input" />
-                    </div>
-                    <div class="col-3">
-                      <input type="text" placeholder="0" class="custom-input" />
-                    </div>
-                    <div class="col-3">
-                      <input type="text" placeholder="0" class="custom-input" />
-                    </div>
-                  </div>
+                  </form>
                 </div>
               </div>
 
@@ -1022,7 +1024,7 @@
                     </button>
                   </div>
                   <div class="col-12 col-sm-6 mb-5">
-                    <button class="btn btn-bg-primary">
+                    <button [disabled]="mobileOtpForm.invalid" class="btn btn-bg-primary" id="mobile-otp-btn" (click)="OnSubmitVerifyMobileOtp()">
                       <span class="fs-16">Submit</span>
                     </button>
                   </div>
@@ -1034,9 +1036,82 @@
       </div>
     </div>
   </div>
+
+  <div class="custom-modal md d-none otp-modal-email" id="otp-modal">
+    <div class="close">
+      <img src="./assets/custom/images/close.svg" alt="close" />
+    </div>
+    <div class="modal-body no-head">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-5 d-flex justify-content-center mb-4 mb-md-0">
+            <div class="
+                  text-center
+                  d-flex
+                  flex-column
+                  justify-content-center
+                  align-items-center
+                ">
+              <div class="img">
+                <img src="./assets/custom/images/otp.svg" alt="otp" />
+              </div>
+            </div>
+          </div>
+          <div class="col-md-7">
+            <h2 class="fw-600 resist-size text-center text-md-left verify">
+              Verify Your Email OTP
+            </h2>
+            <div class="fs-14 sub">
+              Your one time password has sent to bhavesh.nagotha@gmail.com
+            </div>
+
+            <div class="form">
+              <div class="otp-boxes mt-3">
+                <div class="container p-0">
+                  <form id="email-otp-frm" [formGroup]="emailOtpForm">
+                  <div class="row">
+                    <div class="col-3">
+                      <input type="text" mask="0" formControlName="first_val" placeholder="0" class="custom-input active" />
+                    </div>
+                    <div class="col-3">
+                      <input type="text" mask="0" formControlName="second_val" placeholder="0" class="custom-input" />
+                    </div>
+                    <div class="col-3">
+                      <input type="text" mask="0" formControlName="third_val" placeholder="0" class="custom-input" />
+                    </div>
+                    <div class="col-3">
+                      <input type="text" mask="0" formControlName="fourth_val" placeholder="0" class="custom-input" />
+                    </div>
+                  </div>
+                </form>
+                </div>
+              </div>
+
+              <div class="container p-0 btns">
+                <div class="row">
+                  <div class="col-12 col-sm-6 py-3 py-sm-0">
+                    <button class="btn btn-outlined-dark">
+                      <span class="fs-16">Resend</span>
+                    </button>
+                  </div>
+                  <div class="col-12 col-sm-6 mb-5">
+                    <button [disabled]="emailOtpForm.invalid" class="btn btn-bg-primary" id="email-otp-btn" (click)="OnSubmitVerifyEmailOtp()">
+                      <span class="fs-16">Submit</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   <div class="slider_hed">
     <div class="slider_hed_p1">
-      <h2 class="resist-size">PLA<span>NYY</span></h2>
+      <!-- <h2 class="resist-size">PLA<span>NYY</span></h2> -->
     </div>
     <div class="slider_hed_p2">
       <a data-toggle="modal" data-target="#exampleModal6">        
@@ -1069,19 +1144,19 @@
   <div class="swiper-container mySwiper">
     <div class="swiper-wrapper">
       <div class="swiper-slide">
-        <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
+        <!-- <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
           src="./assets/custom/images/mobile_slider.jpg" /><img src="./assets/custom/images/ipad_slider.jpg" /><img
-          src="./assets/custom/images/Cover_Push_auto_1920.jpg" />
+          src="./assets/custom/images/Cover_Push_auto_1920.jpg" /> -->
       </div>
       <div class="swiper-slide">
-        <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
+        <!-- <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
           src="./assets/custom/images/mobile_slider.jpg" /><img src="./assets/custom/images/ipad_slider.jpg" /><img
-          src="./assets/custom/images/Cover_Push_auto_1920.jpg" />
+          src="./assets/custom/images/Cover_Push_auto_1920.jpg" /> -->
       </div>
       <div class="swiper-slide">
-        <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
+        <!-- <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
           src="./assets/custom/images/mobile_slider.jpg" /><img src="./assets/custom/images/ipad_slider.jpg" /><img
-          src="./assets/custom/images/Cover_Push_auto_1920.jpg" />
+          src="./assets/custom/images/Cover_Push_auto_1920.jpg" /> -->
       </div>
     </div>
     <div class="swiper-pagination"></div>
