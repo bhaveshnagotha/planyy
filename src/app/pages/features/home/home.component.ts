@@ -39,6 +39,10 @@ export class HomeComponent implements OnInit {
   customerID: number = 0;
   signUpStoredData:any;
 
+  showPass: boolean = false;
+  showCPass: boolean = false;
+  showPassSignIn: boolean = false;
+
 
   passwordCheck: any = {
     eightormore: false,
@@ -68,18 +72,21 @@ export class HomeComponent implements OnInit {
   OnSubmitVerifyEmailOtp(){    
     if (this.emailOtpForm.invalid) {
       return;
-    }    
-    this.authenticationService
-      .signup(this.signUpStoredData[0])
-      .pipe(first())
-      .subscribe(
-        (data) => {
-          this.signUpForm.reset();
-          $("#dark-overlay").addClass("d-none");
-          $(".otp-modal-email").addClass("d-none");
-          this.toastr.success("Customer Created Successfully", "Success");
-        }
-    );
+    }  
+
+    $(".otp-modal-email").addClass("d-none");
+    $(".welcome-to-planyy").removeClass("d-none");    
+    // this.authenticationService
+    //   .signup(this.signUpStoredData[0])
+    //   .pipe(first())
+    //   .subscribe(
+    //     (data) => {
+    //       this.signUpForm.reset();
+    //       $("#dark-overlay").addClass("d-none");
+    //       $(".otp-modal-email").addClass("d-none");
+    //       this.toastr.success("Customer Created Successfully", "Success");
+    //     }
+    // );
     
     
     //console.log(this.signUpStoredData[0]['data']['email'])
@@ -145,7 +152,9 @@ export class HomeComponent implements OnInit {
     if (this.requestCallForm.invalid) {
       console.log("false");
       return;
-    }
+    }    
+    $(".call-modal-popup").addClass("d-none");
+    $(".call-modal-popup-msg").removeClass("d-none");    
     console.log("true");
   }
 
@@ -160,6 +169,10 @@ export class HomeComponent implements OnInit {
   showForm(e: string) {
     this.signUpForm.reset();
     this.signInForm.reset();
+
+    this.showPass = false;
+    this.showCPass = false;
+    this.showPassSignIn = false;
 
     if (e == "signin") {
       this.signupform = false;
@@ -192,6 +205,21 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  closeModalPopup(){
+    $("#dark-overlay").addClass("d-none");    
+    $(".close").parent().addClass("d-none");
+  }
+
+  showPassword(){    
+    this.showPass = !this.showPass;
+  }
+  showCPassword(){    
+    this.showCPass = !this.showCPass;
+  }
+  showPasswordSignIn(){    
+    this.showPassSignIn = !this.showPassSignIn;
+  }
+  
   ngOnInit(): void {
     let cId = localStorage.getItem("CurrentCustomerInfo");
     this.customerID = JSON.parse(
@@ -213,7 +241,7 @@ export class HomeComponent implements OnInit {
         fourth_val: ["", [Validators.required]]
       }
     );
-
+  
     this.emailOtpForm = this.fb.group(
       {
         first_val: ["", [Validators.required]],
@@ -222,8 +250,8 @@ export class HomeComponent implements OnInit {
         fourth_val: ["", [Validators.required]]
       }
     );
-
-    this.signUpForm = this.fb.group(
+  
+  this.signUpForm = this.fb.group(
       {
         email: ["", [Validators.required, Validators.email]],
         mobileNumber: [
@@ -336,6 +364,10 @@ export class HomeComponent implements OnInit {
       self.signupform = false;
       self.signUpForm.reset();
       self.signInForm.reset();
+      self.showPass = false;
+      self.showCPass = false;
+      self.showPassSignIn = false;
+
       $("#dark-overlay").addClass("d-none");
     });
 

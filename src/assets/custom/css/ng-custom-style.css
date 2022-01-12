@@ -1,0 +1,46 @@
+.modal-popup-msg-body h2{
+  font: normal normal 600 28px/59px Source Sans Pro;
+  color: #31353F;
+}
+.modal-popup-msg-body p{
+  text-align: center;
+  font: normal normal normal 14px/22px Source Sans Pro;
+  letter-spacing: 0px;
+  color: #B2B2B2;
+  text-transform: capitalize;
+}
+.modal-popup-msg-body button{
+  display: inline-flex;
+}
+
+
+.custom-form-control .with-icon .icon { 
+  top: 21%!important;
+  transform: translateY(1%)!important;
+}
+
+.modal-popup-msg-body .h2-brand-name-s{
+  color: var(--unnamed-color-ffc32c);
+  text-align: left;
+  font: normal normal 600 32px/36px Source Sans Pro;
+  letter-spacing: 0px;
+  color: #FFC32C;
+  text-transform: capitalize;
+}
+
+.custom-form-control .with-icon .pass-show-hide-icon {
+  pointer-events: unset!important;
+  cursor: pointer;
+}
+
+.forgot-pass-link{
+  color: var(--unnamed-color-ffc32c);
+  text-align: left;
+  font: normal normal normal 14px/17px Source Sans Pro;
+  letter-spacing: 0px;
+  color: #FFC32C;
+  opacity: 1;
+}
+.forgot-pass-link:hover{
+  color: #FFC32C;
+}

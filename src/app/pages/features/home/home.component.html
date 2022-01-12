@@ -685,15 +685,15 @@
       <form id="sent-message-frm" [formGroup]="sentMsgForm" (ngSubmit)="sentMessage()">
 
       
-      <div class="custom-form-control pt-3 with-helper" [class]="(sentMsgForm.get('name').invalid && sentMsgForm.get('name').touched) ? 'error':''">
+      <div class="custom-form-control pt-3 with-helper" [class]="(sentMsgForm.get('name').invalid && sentMsgForm.get('name').touched) ? '':''">
         <input class="custom-input" type="text" formControlName="name" placeholder="Enter your name" />
         <app-show-error [field]="sentMsgForm.get('name')" [name]="'Your name'"></app-show-error>
       </div>
-      <div class="custom-form-control mt-4 with-helper" [class]="(sentMsgForm.get('mobile_number').invalid && sentMsgForm.get('mobile_number').touched) ? 'error':''">
+      <div class="custom-form-control mt-4 with-helper" [class]="(sentMsgForm.get('mobile_number').invalid && sentMsgForm.get('mobile_number').touched) ? '':''">
         <input class="custom-input" type="text" formControlName="mobile_number" placeholder="Enter your Mobile No." />
         <app-show-error [field]="sentMsgForm.get('mobile_number')" [name]="'Mobile number'"></app-show-error>
       </div>
-      <div class="custom-form-control mt-4 with-helper" [class]="(sentMsgForm.get('message').invalid && sentMsgForm.get('message').touched) ? 'error':''">
+      <div class="custom-form-control mt-4 with-helper" [class]="(sentMsgForm.get('message').invalid && sentMsgForm.get('message').touched) ? '':''">
         <textarea class="custom-input" formControlName="message" placeholder="Write your message" rows="5"></textarea>
         <app-show-error [field]="sentMsgForm.get('message')" [name]="'Your message'"></app-show-error>
       </div>
@@ -706,7 +706,7 @@
 
     </div>
   </div>
-  <div class="custom-modal xs d-none" id="call-modal">
+  <div class="custom-modal xs d-none call-modal-popup" id="call-modal">
     <div class="close">
       <img src="./assets/custom/images/close.svg" alt="close" />
     </div>
@@ -716,15 +716,15 @@
       </h2>
 
       <form id="request-call-frm" [formGroup]="requestCallForm" (ngSubmit)="requestCall()">
-      <div class="custom-form-control pt-3 with-helper" [class]="(requestCallForm.get('name').invalid && requestCallForm.get('name').touched) ? 'error':''">
+      <div class="custom-form-control pt-3 with-helper" [class]="(requestCallForm.get('name').invalid) ? '':''">
         <input class="custom-input" type="text" formControlName="name" placeholder="Enter your name" />
         <app-show-error [field]="requestCallForm.get('name')" [name]="'Your name'"></app-show-error>
       </div>
-      <div class="custom-form-control mt-4 with-helper" [class]="(requestCallForm.get('mobile_number').invalid && requestCallForm.get('mobile_number').touched) ? 'error':''">
+      <div class="custom-form-control mt-4 with-helper" [class]="(requestCallForm.get('mobile_number').invalid) ? '':''">
         <input class="custom-input" type="text" formControlName="mobile_number" placeholder="Enter your Mobile No." />
         <app-show-error [field]="requestCallForm.get('mobile_number')" [name]="'Mobile number'"></app-show-error>
       </div>
-      <div class="custom-form-control mt-4 with-helper" [class]="(requestCallForm.get('date').invalid && requestCallForm.get('date').touched) ? 'error':''">
+      <div class="custom-form-control mt-4 with-helper" [class]="(requestCallForm.get('date').invalid) ? '':''">
         <div class="with-icon">
           <input class="custom-input" type="text" formControlName="date" id="example" type="date" placeholder="Choose Date" /><svg class="icon"
             xmlns="http://www.w3.org/2000/svg" width="16" height="16.055" viewBox="0 0 16 16.055">
@@ -755,10 +755,11 @@
 
         </div>
       </div>
-      <div class="custom-form-control mt-4 with-helper" [class]="(requestCallForm.get('time').invalid && requestCallForm.get('time').touched) ? 'error':''">
+      <div class="custom-form-control mt-4 with-helper" [class]="(requestCallForm.get('time').invalid) ? '':''">
         <div class="with-icon">
           <input class="custom-input timepicker" type="text" formControlName="time" placeholder="Choose Time" onfocus="(this.type='date')"
             onblur="(this.type='text')" />
+          <app-show-error [field]="requestCallForm.get('time')" [name]="'Time'"></app-show-error>
           <div id="dark-overlay-timer"></div>
 
           <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" class="icon no-clr">
@@ -777,7 +778,7 @@
             </g>
           </svg>
 
-          <app-show-error [field]="requestCallForm.get('time')" [name]="'Time'"></app-show-error>
+          
         </div>
       </div>
       <div class="bottom-btn-sm">
@@ -788,6 +789,21 @@
 
     </div>
   </div>
+
+  <div class="custom-modal xs d-none call-modal-popup-msg" id="call-modal">
+    <div class="close">
+      <img src="./assets/custom/images/close.svg" alt="close" />
+    </div>
+    <div class="modal-body no-head modal-popup-msg-body text-center text-sm-center">
+      <img src="./assets/custom/img/Group 12789.png" alt="user" />
+      <h2 class="resist-size text-center text-sm-center">
+        Message Send
+      </h2>
+      <p>A Member Of Support Team Will Get In Touch With You Shortly.</p>      
+      <button id="call-btn" class="btn btn-bg-primary mt-4 modal-popup-close" (click)="closeModalPopup()">Close</button>
+    </div>
+  </div>
+
   <div class="custom-modal md d-none" id="signup-modal">
     <div class="close">
       <img src="./assets/custom/images/close.svg" alt="close" />
@@ -823,11 +839,11 @@
             </h2>
             <form id="signup-frm" [formGroup]="signUpForm" (ngSubmit)="signUp()">
 
-                <div class="custom-form-control pt-3 with-helper" [class]="(signUpForm.get('email').invalid && signUpForm.get('email').touched) ? 'error':''">
+                <div class="custom-form-control pt-3 with-helper" [class]="(signUpForm.get('email').invalid && signUpForm.get('email').touched) ? '':''">
                     <input class="custom-input" id="email" type="text" formControlName="email" autocomplete="off" placeholder="Email Address"/>
                     <app-show-error [field]="signUpForm.get('email')" [name]="'Email Address'"></app-show-error>                    
                 </div>
-                <div class="custom-form-control mt-4 with-helper" [class]="(signUpForm.get('mobileNumber').invalid && signUpForm.get('mobileNumber').touched) ? 'error':''">
+                <div class="custom-form-control mt-4 with-helper" [class]="(signUpForm.get('mobileNumber').invalid && signUpForm.get('mobileNumber').touched) ? '':''">
                     <input class="custom-input" type="text" formControlName="mobileNumber" autocomplete="off" placeholder="Mobile Number" />
                     <app-show-error [field]="signUpForm.get('mobileNumber')" [name]="'Mobile Number'"></app-show-error>
                 </div>
@@ -854,13 +870,13 @@
                     </div>
                     <div class="with-icon">
 
-                        <div class="custom-form-control mt-4 with-helper" [class]="(signUpForm.get('password').invalid && signUpForm.get('password').touched) ? 'error':''">
-                            <input class="custom-input" type="password" formControlName="password" autocomplete="off" placeholder="Password" (input)="checkPassword($event)" />
+                        <div class="custom-form-control mt-4 with-helper" [class]="(signUpForm.get('password').invalid && signUpForm.get('password').touched) ? '':''">
+                            <input class="custom-input" [type]="showPass ? 'text' : 'password'" formControlName="password" autocomplete="off" placeholder="Password" (input)="checkPassword($event)" />
                             <!-- <app-show-error [field]="signUpForm.get('password')" [name]="'Password'"></app-show-error> -->
                         </div>
-                        <!-- <svg class="icon no-clr" id="Component_95_6" data-name="Component 95 – 6"
+                        <svg class="icon no-clr pass-show-hide-icon" id="Component_95_6" data-name="Component 95 – 6"
                             xmlns="http://www.w3.org/2000/svg" width="16.707" height="16.707"
-                            viewBox="0 0 16.707 16.707">
+                            viewBox="0 0 16.707 16.707" (click)="showPassword()">
                             <g id="Rectangle_1590" data-name="Rectangle 1590" fill="#e8e8e8" stroke="#e8e8e8"
                                 stroke-width="1" opacity="0">
                                 <rect width="16" height="16" stroke="none" />
@@ -875,12 +891,32 @@
                                     transform="translate(0.32 0.32)" fill="none" stroke="#e8e8e8"
                                     stroke-linecap="round" stroke-linejoin="round" stroke-width="1" />
                             </g>
-                        </svg> -->
+                        </svg>
                     </div>
                 </div>
-                <div class="custom-form-control mt-4 with-helper" [class]="(signUpForm.get('confirmPassword').invalid && signUpForm.get('confirmPassword').touched) ? 'error':''">
-                    <input class="custom-input" type="password" formControlName="confirmPassword" autocomplete="off" placeholder="Confirm Password" />
+                <div class="custom-form-control mt-4 with-helper" [class]="(signUpForm.get('confirmPassword').invalid && signUpForm.get('confirmPassword').touched) ? '':''">
+                  <div class="with-icon">
+                    <input class="custom-input" [type]="showCPass ? 'text' : 'password'" formControlName="confirmPassword" autocomplete="off" placeholder="Confirm Password" />
                     <app-show-error [field]="signUpForm.get('confirmPassword')" [name]="'Confirm Password'"></app-show-error>
+                    <svg class="icon no-clr pass-show-hide-icon" id="Component_95_6" data-name="Component 95 – 6"
+                          xmlns="http://www.w3.org/2000/svg" width="16.707" height="16.707"
+                          viewBox="0 0 16.707 16.707" (click)="showCPassword()">
+                          <g id="Rectangle_1590" data-name="Rectangle 1590" fill="#e8e8e8" stroke="#e8e8e8"
+                              stroke-width="1" opacity="0">
+                              <rect width="16" height="16" stroke="none" />
+                              <rect x="0.5" y="0.5" width="15" height="15" fill="none" />
+                          </g>
+                          <g id="eye-off" transform="translate(0.68 0.68)">
+                              <path id="Path_10232" data-name="Path 10232"
+                                  d="M12.518,13.478a6.847,6.847,0,0,1-4.039,1.4C3.72,14.879,1,9.439,1,9.439A12.545,12.545,0,0,1,4.44,5.4M7.051,4.163A6.2,6.2,0,0,1,8.479,4c4.76,0,7.479,5.439,7.479,5.439a12.579,12.579,0,0,1-1.469,2.169m-4.569-.728A2.04,2.04,0,1,1,7.038,8"
+                                  transform="translate(-1 -1.96)" fill="none" stroke="#e8e8e8"
+                                  stroke-linecap="round" stroke-linejoin="round" stroke-width="1" />
+                              <line id="Line_235" data-name="Line 235" x2="15" y2="15"
+                                  transform="translate(0.32 0.32)" fill="none" stroke="#e8e8e8"
+                                  stroke-linecap="round" stroke-linejoin="round" stroke-width="1" />
+                          </g>
+                      </svg>
+                    </div>
                 </div>
                   <div class="
                         d-flex
@@ -913,22 +949,42 @@
             </h2>
             <form id="signin-frm" [formGroup]="signInForm" (ngSubmit)="signIn()">
 
-                <div class="custom-form-control pt-3 with-helper" [class]="(signInForm.get('username').invalid && signInForm.get('username').touched) ? 'error':''">
+                <div class="custom-form-control pt-3 with-helper" [class]="(signInForm.get('username').invalid && signInForm.get('username').touched) ? '':''">
                     <input class="custom-input" id="username" type="text" formControlName="username" autocomplete="off" placeholder="Enter Your Mobile No/Email"/>
                     <app-show-error [field]="signInForm.get('username')" [name]="'Mobile or Email'"></app-show-error>                    
                 </div>                
                 <div class="custom-form-control mt-4 pwd-container">                   
                     <div class="with-icon">
-                        <div class="custom-form-control mt-4 with-helper" [class]="(signInForm.get('password').invalid && signInForm.get('password').touched) ? 'error':''">
-                            <input class="custom-input" type="password" formControlName="password" autocomplete="off" placeholder="Enter Your Password" />
+                        <div class="custom-form-control mt-4 with-helper" [class]="(signInForm.get('password').invalid && signInForm.get('password').touched) ? '':''">
+                            <input class="custom-input" [type]="showPassSignIn ? 'text' : 'password'" formControlName="password" autocomplete="off" placeholder="Enter Your Password" />
                             <app-show-error [field]="signInForm.get('password')" [name]="'Password'"></app-show-error>
+
+                            <svg class="icon no-clr pass-show-hide-icon" id="Component_95_6" data-name="Component 95 – 6"
+                              xmlns="http://www.w3.org/2000/svg" width="16.707" height="16.707"
+                              viewBox="0 0 16.707 16.707" (click)="showPasswordSignIn()">
+                              <g id="Rectangle_1590" data-name="Rectangle 1590" fill="#e8e8e8" stroke="#e8e8e8"
+                                  stroke-width="1" opacity="0">
+                                  <rect width="16" height="16" stroke="none" />
+                                  <rect x="0.5" y="0.5" width="15" height="15" fill="none" />
+                              </g>
+                              <g id="eye-off" transform="translate(0.68 0.68)">
+                                  <path id="Path_10232" data-name="Path 10232"
+                                      d="M12.518,13.478a6.847,6.847,0,0,1-4.039,1.4C3.72,14.879,1,9.439,1,9.439A12.545,12.545,0,0,1,4.44,5.4M7.051,4.163A6.2,6.2,0,0,1,8.479,4c4.76,0,7.479,5.439,7.479,5.439a12.579,12.579,0,0,1-1.469,2.169m-4.569-.728A2.04,2.04,0,1,1,7.038,8"
+                                      transform="translate(-1 -1.96)" fill="none" stroke="#e8e8e8"
+                                      stroke-linecap="round" stroke-linejoin="round" stroke-width="1" />
+                                  <line id="Line_235" data-name="Line 235" x2="15" y2="15"
+                                      transform="translate(0.32 0.32)" fill="none" stroke="#e8e8e8"
+                                      stroke-linecap="round" stroke-linejoin="round" stroke-width="1" />
+                              </g>
+                          </svg>
+                          
                         </div>
                         
                     </div>
                 </div>         
 
-                <div class="fs-16 mt-sm-3 mt-2 text-center text-md-right">                    
-                  <a href="#" >Forgot password?</a>
+                <div class="fs-16 mt-sm-1 mt-1 text-right text-md-right text-sm-right">                    
+                  <a href="#" class="forgot-pass-link">Forgot password?</a>
                 </div>
 
                 <!-- <div *ngIf="isLoggedin === false">
@@ -942,7 +998,7 @@
                     flex-sm-row flex-column
                     align-items-center
                     justify-content-between
-                    mt-sm-5 mt-4
+                    mt-sm-3 mt-3
                     ">
                 <button type="submit" [disabled]="signInForm.invalid" class="btn btn-bg-primary" id="signup-btn">
                     Sign in
@@ -1105,6 +1161,21 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+
+
+  <div class="custom-modal xs d-none call-modal-popup-msg welcome-to-planyy" id="call-modal">
+    <div class="close">
+      <img src="./assets/custom/images/close.svg" alt="close" />
+    </div>
+    <div class="modal-body no-head modal-popup-msg-body text-center text-sm-center">
+      <img src="./assets/custom/img/Group 10828.png" alt="welcome to planyy" />
+      <h2 class="resist-size text-center text-sm-center h2-welcome-title">
+        Welcome To <span class="h2-brand-name-s">Planyy</span>
+      </h2>
+      <p class="p-small-txt">Explore Your Financial Planning</p>            
     </div>
   </div>
 

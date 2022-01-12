@@ -27,6 +27,7 @@
               "src/assets"
             ],
             "styles": [              
+              "src/assets/custom/css/ng-custom-style.css",
               "src/assets/custom/css/animate.compat.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",  
               "src/assets/custom/css/utilities.css", 
