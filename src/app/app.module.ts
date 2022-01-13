@@ -25,7 +25,7 @@ import { JwtInterceptor, ErrorInterceptor } from './_helpers';
   declarations: [
     AppComponent,
     HeaderComponent,
-    FooterComponent    
+    FooterComponent        
   ],
   imports: [
     HttpClientModule,

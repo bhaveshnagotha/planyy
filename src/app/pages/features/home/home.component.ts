@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { constants, CustomValidator } from "src/app/_constants";
 
-import { AuthenticationService, CommonApiService } from "src/app/_services";
+import { AuthenticationService, CommonApiService,CommonService } from "src/app/_services";
 import { first } from "rxjs/operators";
 import {
   SocialAuthService,
@@ -21,8 +21,10 @@ declare var $: any;
   styleUrls: ["./home.component.css"],
 })
 export class HomeComponent implements OnInit {
+  
   signUpForm: any = FormGroup;
   signInForm: any = FormGroup;
+  forgotForm: any = FormGroup;
   requestCallForm: any = FormGroup;
   sentMsgForm: any = FormGroup;
 
@@ -42,7 +44,9 @@ export class HomeComponent implements OnInit {
   showPass: boolean = false;
   showCPass: boolean = false;
   showPassSignIn: boolean = false;
+  submitted: boolean = false;
 
+  tooltipShow: boolean = false;
 
   passwordCheck: any = {
     eightormore: false,
@@ -56,12 +60,14 @@ export class HomeComponent implements OnInit {
     public fb: FormBuilder,
     private socialAuthService: SocialAuthService,
     private commonApiService: CommonApiService,
+    private commonService : CommonService,
     public router: Router
   ) {}
 
   OnSubmitVerifyMobileOtp(){   
     
     if (this.mobileOtpForm.invalid) {
+      this.commonService.markAsTouched(this.mobileOtpForm);
       return;
     }
     $(".otp-modal-mobile").addClass("d-none");
@@ -71,6 +77,7 @@ export class HomeComponent implements OnInit {
 
   OnSubmitVerifyEmailOtp(){    
     if (this.emailOtpForm.invalid) {
+      this.commonService.markAsTouched(this.emailOtpForm);
       return;
     }  
 
@@ -93,7 +100,9 @@ export class HomeComponent implements OnInit {
   }
 
   signUp() {
+    
     if (this.signUpForm.invalid) {
+      this.commonService.markAsTouched(this.signUpForm);
       return;
     }
 
@@ -114,6 +123,7 @@ export class HomeComponent implements OnInit {
 
   signIn() {
     if (this.signInForm.invalid) {
+      this.commonService.markAsTouched(this.signInForm);
       return;
     }
     this.authenticationService
@@ -126,6 +136,19 @@ export class HomeComponent implements OnInit {
         this.toastr.success("Welcome back!", "Success");
       });
   }
+
+  forgot() {
+    if (this.forgotForm.invalid) {
+      this.commonService.markAsTouched(this.forgotForm);      
+      return;
+    }
+
+    $(".forgot-pass-modal").addClass("d-none");
+    $(".forgotpass-modal-popup-msg").removeClass("d-none");
+
+    console.log("ok success")
+  }
+
 
   getCurrentUserInfo() {
     this.commonApiService
@@ -150,17 +173,17 @@ export class HomeComponent implements OnInit {
 
   requestCall() {
     if (this.requestCallForm.invalid) {
-      console.log("false");
+      this.commonService.markAsTouched(this.requestCallForm);      
       return;
     }    
     $(".call-modal-popup").addClass("d-none");
-    $(".call-modal-popup-msg").removeClass("d-none");    
+    $(".call-modal-popup-msg-for-msgsend").removeClass("d-none");    
     console.log("true");
   }
 
   sentMessage() {
     if (this.sentMsgForm.invalid) {
-      console.log("false");
+      this.commonService.markAsTouched(this.sentMsgForm);      
       return;
     }
     console.log("true");
@@ -179,6 +202,11 @@ export class HomeComponent implements OnInit {
     } else {
       this.signupform = true;
     }
+  }
+
+  showForgotForm(){    
+    $("#signup-modal").addClass("d-none");
+    $(".forgot-pass-modal").removeClass("d-none");
   }
 
   loginWithGoogle(): void {
@@ -221,6 +249,44 @@ export class HomeComponent implements OnInit {
   }
   
   ngOnInit(): void {
+
+
+
+    // 
+    let iv:any = "wC5FKsuH951YkGV7";
+    // 
+     let message:any = "0796";
+    // 16
+     let secret_key:any = "XpUXmLs2WkqhPA9N";
+
+    //utf-8  
+     message = CryptoJS.enc.Utf8.parse(message);
+     secret_key = CryptoJS.enc.Utf8.parse(secret_key);
+     iv = CryptoJS.enc.Utf8.parse(iv);
+    
+    //Encrypt    
+     var ciphertext = CryptoJS.AES.encrypt(message, secret_key, { 
+         iv: iv,
+         mode: CryptoJS.mode.CBC, 
+         padding: CryptoJS.pad.Pkcs7
+     });
+     console.log(ciphertext.toString());
+     
+    //Decrypt
+     var bytes  = CryptoJS.AES.decrypt(ciphertext.toString(), secret_key,{
+         iv: iv,
+         mode: CryptoJS.mode.CBC,                   
+         padding: CryptoJS.pad.Pkcs7 
+     });
+     console.log(bytes.toString(CryptoJS.enc.Utf8));
+     
+
+    // var encrypted = this.commonService.set('wC5FKsuH951YkGV7', '7180');
+    // var decrypted = this.commonService.get('wC5FKsuH951YkGV7', encrypted);
+   
+    // console.log('Encrypted :' + encrypted);
+    // console.log('Decrypted :' + decrypted);
+
     let cId = localStorage.getItem("CurrentCustomerInfo");
     this.customerID = JSON.parse(
       cId != null ? JSON.parse(cId)["idCustomer"] : 0
@@ -265,12 +331,16 @@ export class HomeComponent implements OnInit {
             CustomValidator.createPasswordStrengthValidator(),
           ],
         ],
-        confirmPassword: [""],
+        confirmPassword: ["",Validators.required],
       },
       {
         validator: CustomValidator.mustMatch("password", "confirmPassword"),
       }
     );
+
+    this.forgotForm = this.fb.group({
+      username: ["", [Validators.required]]      
+    });
 
     this.signInForm = this.fb.group({
       username: ["", [Validators.required]],
@@ -416,6 +486,7 @@ export class HomeComponent implements OnInit {
 
   checkPassword(event: any) {
     if (event.target.value != "") {
+      this.tooltipShow = true
       let string = event.target.value;
       let Uppercase = 0;
       let Lowercase = 0;
@@ -437,6 +508,7 @@ export class HomeComponent implements OnInit {
         }
       }
     } else {
+      this.tooltipShow = false
       this.passwordCheck.upperlower = false;
       this.passwordCheck.eightormore = false;
       this.passwordCheck.onenumber = false;

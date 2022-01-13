@@ -3,13 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule,FormsModule } from '@angular/forms';
 import { ShowErrorModule } from 'src/app/pages/common/show-error/show-error.module';
 
-
-@NgModule({
+@NgModule({    
     exports: [
         CommonModule,        
         FormsModule,
         ReactiveFormsModule,
-        ShowErrorModule   
+        ShowErrorModule       
     ],
     providers:[]
 })
