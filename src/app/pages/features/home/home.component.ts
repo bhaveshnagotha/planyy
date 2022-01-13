@@ -140,10 +140,6 @@ export class HomeComponent implements OnInit {
 
   forgot() {
     if (this.forgotForm.invalid) {
-<<<<<<< HEAD
-      this.commonService.markAsTouched(this.forgotForm);      
-=======
->>>>>>> 8fea27add5efa5f55409d0ad8962aaf8bfc160d3
       return;
     }
 
@@ -153,10 +149,7 @@ export class HomeComponent implements OnInit {
     console.log("ok success")
   }
 
-<<<<<<< HEAD
-=======
   
->>>>>>> 8fea27add5efa5f55409d0ad8962aaf8bfc160d3
 
   getCurrentUserInfo() {
     this.commonApiService
