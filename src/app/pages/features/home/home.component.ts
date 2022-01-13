@@ -36,7 +36,8 @@ export class HomeComponent implements OnInit {
   isLoggedin: boolean = false;
   sessionActive: boolean = true;
 
-  signupform: boolean = false;
+  signupform: boolean = false;  
+  
 
   customerID: number = 0;
   signUpStoredData:any;
@@ -139,7 +140,10 @@ export class HomeComponent implements OnInit {
 
   forgot() {
     if (this.forgotForm.invalid) {
+<<<<<<< HEAD
       this.commonService.markAsTouched(this.forgotForm);      
+=======
+>>>>>>> 8fea27add5efa5f55409d0ad8962aaf8bfc160d3
       return;
     }
 
@@ -149,6 +153,10 @@ export class HomeComponent implements OnInit {
     console.log("ok success")
   }
 
+<<<<<<< HEAD
+=======
+  
+>>>>>>> 8fea27add5efa5f55409d0ad8962aaf8bfc160d3
 
   getCurrentUserInfo() {
     this.commonApiService
@@ -199,7 +207,7 @@ export class HomeComponent implements OnInit {
 
     if (e == "signin") {
       this.signupform = false;
-    } else {
+    } else  {
       this.signupform = true;
     }
   }
@@ -347,6 +355,12 @@ export class HomeComponent implements OnInit {
       password: ["", [Validators.required]],
     });
 
+    this.forgotForm = this.fb.group({
+      username: ["", [Validators.required]]      
+    });
+
+    
+
     this.requestCallForm = this.fb.group({
       name: ["", [Validators.required]],
       mobile_number: [
@@ -434,6 +448,7 @@ export class HomeComponent implements OnInit {
       self.signupform = false;
       self.signUpForm.reset();
       self.signInForm.reset();
+      self.forgotForm.reset();
       self.showPass = false;
       self.showCPass = false;
       self.showPassSignIn = false;

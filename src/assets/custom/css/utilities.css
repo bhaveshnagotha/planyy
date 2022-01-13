@@ -3261,7 +3261,7 @@ textarea.custom-input.with-outline,
   width: 28%;
   border: 1px solid #ccc;
   margin: auto;
-  background: url(./images/arrow.png) no-repeat;
+  /* background: url(./images/arrow.png) no-repeat; */
   border-radius: 5px;
 }
 
