@@ -34,3 +34,15 @@ button#forgot-btn:disabled {
     font: normal normal 600 28px/59px Source Sans Pro;
     color: #31353F;
 }
+
+.pwd-container .custom-tooltip {    
+    left: 10.5rem;    
+}
+
+.otp-boxes-login input {
+    font-size: 32px;
+    padding: 1.125rem 0.75rem;
+    text-align: center;
+    font-weight: 500;
+    height: 72px;
+}

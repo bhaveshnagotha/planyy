@@ -37,10 +37,15 @@ export class HomeComponent implements OnInit {
   sessionActive: boolean = true;
 
   signupform: boolean = false;  
+
+  loginvia: boolean = true;  
   
 
   customerID: number = 0;
   signUpStoredData:any;
+  signUpStoredData1:any;
+  loginOtpStoredData:any;
+  mobileOtpStoreData:any;
 
   showPass: boolean = false;
   showCPass: boolean = false;
@@ -48,6 +53,12 @@ export class HomeComponent implements OnInit {
   submitted: boolean = false;
 
   tooltipShow: boolean = false;
+  
+  isValidEmail:any;
+  isValidMobile:any;
+
+  emailOtpName:any;
+  mobOtpName:any;
 
   passwordCheck: any = {
     eightormore: false,
@@ -71,6 +82,17 @@ export class HomeComponent implements OnInit {
       this.commonService.markAsTouched(this.mobileOtpForm);
       return;
     }
+   
+
+    let mobileOtpFrmData = [];    
+    var mobileOtpData = 
+    {
+      data: this.mobileOtpForm.value,
+    }
+    
+    mobileOtpFrmData.push(mobileOtpData);
+    this.mobileOtpStoreData = mobileOtpFrmData; 
+
     $(".otp-modal-mobile").addClass("d-none");
     $(".otp-modal-email").removeClass("d-none");
     //console.log(this.signUpStoredData[0]['data']['email'])
@@ -81,40 +103,106 @@ export class HomeComponent implements OnInit {
       this.commonService.markAsTouched(this.emailOtpForm);
       return;
     }  
+    
+    
+    var mobOtp = (this.mobileOtpStoreData[0]['data']['first_val']+this.mobileOtpStoreData[0]['data']['second_val']+this.mobileOtpStoreData[0]['data']['third_val']+this.mobileOtpStoreData[0]['data']['fourth_val']) 
+    var emOtp = (this.emailOtpForm.controls.first_val.value+this.emailOtpForm.controls.second_val.value+this.emailOtpForm.controls.third_val.value+this.emailOtpForm.controls.fourth_val.value) 
+    console.log(emOtp);
+    var data = this.signUpStoredData[0]['data'];
+    var custRegData= {
+      "isViaGoogle":false,
+      "otpMobile":mobOtp,
+      "actionUuidMobile":this.signUpStoredData1[0]['data']['actionUuidMobile'],
+      "otpEmail":emOtp,
+      "actionUuidEmail":this.signUpStoredData1[0]['data']['actionUuidEmail'],
+      data
+  }
+    console.log(custRegData);
+    
 
-    $(".otp-modal-email").addClass("d-none");
-    $(".welcome-to-planyy").removeClass("d-none");    
-    // this.authenticationService
-    //   .signup(this.signUpStoredData[0])
-    //   .pipe(first())
-    //   .subscribe(
-    //     (data) => {
-    //       this.signUpForm.reset();
-    //       $("#dark-overlay").addClass("d-none");
-    //       $(".otp-modal-email").addClass("d-none");
-    //       this.toastr.success("Customer Created Successfully", "Success");
-    //     }
-    // );
+    this.authenticationService
+      .signup(custRegData)
+      .pipe(first())
+      .subscribe(
+        (data) => {
+          this.signUpForm.reset();
+          $("#dark-overlay").addClass("d-none");
+          $(".otp-modal-email").addClass("d-none");
+          $(".welcome-to-planyy").removeClass("d-none");    
+          this.toastr.success("Customer Created Successfully", "Success");
+        }
+    );
+
+    //$(".otp-modal-email").addClass("d-none");
+    //$(".welcome-to-planyy").removeClass("d-none");    
+    
     
     
     //console.log(this.signUpStoredData[0]['data']['email'])
   }
 
-  signUp() {
+
+  onEmailChange(val: any) {
+    // Check email address exist or not
+    this.commonApiService.getRequest("customer/v1/unique-email/"+val).subscribe((response) => {      
+      if (response) {                                                
+      }
+    },
+    (error) => {                  
+      // CALL THE VALIDATOR HERE TO SET : FALSE
+      this.signUpForm.controls['email'].setErrors({
+        emailAlreadyExist: true
+      });                
+    })    
+  }
+
+  onMobileChange(val: any) {
+    // Check email address exist or not
+    this.commonApiService.getRequest("customer/v1/unique-mobile/"+val).subscribe((response) => {      
+      if (response) {                                                
+      }
+    },
+    (error) => {                  
+      // CALL THE VALIDATOR HERE TO SET : FALSE
+      this.signUpForm.controls['mobileNumber'].setErrors({
+        mobileAlreadyExist: true
+      });                
+    })    
+  }
+
+  onSubmitSignUp() {    
     
-    if (this.signUpForm.invalid) {
+    if (this.signUpForm.invalid) {      
       this.commonService.markAsTouched(this.signUpForm);
       return;
-    }
-
+    }    
     let signUpFrmData = [];
-
     var data = 
     {
       data: this.signUpForm.value,
     }
     signUpFrmData.push(data);
-    this.signUpStoredData = signUpFrmData;    
+    this.signUpStoredData = signUpFrmData;       
+    //console.log(this.signUpStoredData);
+    //this.onPercentChange(this.signUpStoredData[0]['data']['email']);  
+
+    this.emailOtpName = this.signUpStoredData[0]['data']['email'];
+    this.mobOtpName = this.signUpStoredData[0]['data']['mobileNumber'];
+    var otpData = {
+        "email":this.signUpStoredData[0]['data']['email'],
+        "mobileNumber":"9662948584"
+        //"mobileNumber":this.signUpStoredData[0]['data']['mobileNumber']
+    }
+        
+    let signUpFrmData1:any = [];
+    this.commonApiService.postRequest("customer/v1/register-customer/generate-otp",otpData).subscribe((response) => {
+      if (response && response["data"] != "") {     
+        
+        signUpFrmData1.push(response);
+        this.signUpStoredData1 = signUpFrmData1;   
+        this.toastr.success("Mobile & Email OTP has been sent", "Success");       
+      }
+    })   
     
     $("#dark-overlay").removeClass("d-none");
     $("#signup-modal").addClass("d-none");
@@ -140,6 +228,7 @@ export class HomeComponent implements OnInit {
 
   forgot() {
     if (this.forgotForm.invalid) {
+      this.commonService.markAsTouched(this.forgotForm);
       return;
     }
 
@@ -178,18 +267,63 @@ export class HomeComponent implements OnInit {
       return;
     }    
     $(".call-modal-popup").addClass("d-none");
-    $(".call-modal-popup-msg-for-msgsend").removeClass("d-none");    
-    console.log("true");
+    $(".call-modal-popup-msg-for-msgsend").removeClass("d-none");        
   }
 
   sentMessage() {
     if (this.sentMsgForm.invalid) {
       this.commonService.markAsTouched(this.sentMsgForm);      
       return;
-    }
-    console.log("true");
+    }    
+  }
+  
+  resendEmailOtp(val:number) {
+    let emailAddress =  {
+      "email":val
+    }    
+    console.log(val);
+    this.commonApiService.postRequest("customer/v1/change-password/generate-otp",emailAddress).subscribe((response) => {
+      if (response && response["data"] != "") {     
+        this.toastr.success("OTP has been sent on your email address", "Success");       
+      }
+    }) 
   }
 
+  resendMobOtp(val:number) {
+    let mobileNo =  {
+      "mobileNumber":val
+    }    
+    console.log(val);
+    this.commonApiService.postRequest("customer/v1/forget-password/generate-otp",mobileNo).subscribe((response) => {
+      if (response && response["data"] != "") {     
+        this.toastr.success("OTP has been sent on your mobile number", "Success");       
+      }
+    }) 
+  }
+
+  showOtpPassField(e: string,username:string) {    
+    if (e == 'showpassfield') {
+      console.log(username);
+      let mobileNo =  {
+        "mobileNumber":username
+      }
+      let loginOtpUuidStored:any = [];
+      this.commonApiService.postRequest("customer/v1/forget-password/generate-otp",mobileNo).subscribe((response) => {
+        if (response && response["data"] != "") {     
+          
+          loginOtpUuidStored.push(response);
+          this.loginOtpStoredData = loginOtpUuidStored;   
+          this.toastr.success("OTP has been sent to registered mobile number", "Success");       
+        }
+      }) 
+
+      this.loginvia = false;
+    } else  {
+      this.loginvia = true;
+    }
+    
+
+  }
   showForm(e: string) {
     this.signUpForm.reset();
     this.signInForm.reset();
@@ -197,7 +331,7 @@ export class HomeComponent implements OnInit {
     this.showPass = false;
     this.showCPass = false;
     this.showPassSignIn = false;
-
+    this.tooltipShow = false
     if (e == "signin") {
       this.signupform = false;
     } else  {
@@ -340,37 +474,37 @@ export class HomeComponent implements OnInit {
     );
 
     this.forgotForm = this.fb.group({
-      username: ["", [Validators.required]]      
+      username: [null, [Validators.required]]      
     });
 
     this.signInForm = this.fb.group({
-      username: ["", [Validators.required]],
-      password: ["", [Validators.required]],
+      username: [null],
+      password: [null],
     });
 
     this.forgotForm = this.fb.group({
-      username: ["", [Validators.required]]      
+      username: [null, [Validators.required]]      
     });
 
     
 
     this.requestCallForm = this.fb.group({
-      name: ["", [Validators.required]],
+      name: [null, [Validators.required]],
       mobile_number: [
-        "",
+        null,
         [Validators.required, Validators.pattern("[0-9 ]{10}")],
       ],
-      date: ["", [Validators.required]],
-      time: ["", [Validators.required]],
+      date: [null],
+      time: [null],
     });
 
     this.sentMsgForm = this.fb.group({
-      name: ["", [Validators.required]],
+      name: [null, [Validators.required]],
       mobile_number: [
-        "",
+        null,
         [Validators.required, Validators.pattern("[0-9 ]{10}")],
       ],
-      message: ["", [Validators.required]],
+      message: [null, [Validators.required]],
     });
 
     var self = this;
@@ -445,7 +579,7 @@ export class HomeComponent implements OnInit {
       self.showPass = false;
       self.showCPass = false;
       self.showPassSignIn = false;
-
+      self.tooltipShow = false
       $("#dark-overlay").addClass("d-none");
     });
 

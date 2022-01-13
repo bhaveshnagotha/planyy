@@ -666,7 +666,7 @@
 
     <div class="bottom-btn">
       <button (click)="openSignupPopUp('rightsidebtn')" class="btn btn-bg-primary signup fs-24 fs-1919-16" *ngIf="customerID == 0">
-        Sign Up
+        Register
       </button>
       <button (click)="logOut('rightsidebtn')" class="btn btn-bg-primary signup fs-24 fs-1919-16" *ngIf="customerID > 0">
         Logout
@@ -835,16 +835,16 @@
 
           <div class="col-md-7 order-1 order-md-2" *ngIf="signupform">
             <h2 class="fw-600 mb-4 resist-size text-center text-md-left">
-              Sign up
+              Register
             </h2>
-            <form id="signup-frm" [formGroup]="signUpForm" (ngSubmit)="signUp()">
+            <form id="signup-frm" [formGroup]="signUpForm">
 
                 <div class="custom-form-control pt-3 with-helper" [class]="(signUpForm.get('email').invalid && signUpForm.get('email').touched) ? 'error':''">
-                    <input class="custom-input" id="email" type="text" formControlName="email" autocomplete="off" placeholder="Email Address"/>
+                    <input class="custom-input" (change)="onEmailChange(email.value)" #email id="email" type="text" formControlName="email" autocomplete="off" placeholder="Email Address"/>
                     <app-show-error [field]="signUpForm.get('email')" [name]="'Email Address'"></app-show-error>                    
                 </div>
                 <div class="custom-form-control mt-4 with-helper" [class]="(signUpForm.get('mobileNumber').invalid && signUpForm.get('mobileNumber').touched) ? 'error':''">
-                    <input class="custom-input" type="text" formControlName="mobileNumber" autocomplete="off" placeholder="Mobile Number" />
+                    <input class="custom-input" (change)="onMobileChange(mobile.value)" #mobile type="text" formControlName="mobileNumber" autocomplete="off" placeholder="Mobile Number" />
                     <app-show-error [field]="signUpForm.get('mobileNumber')" [name]="'Mobile Number'"></app-show-error>
                 </div>
                 <div class="custom-form-control mt-4 pwd-container">
@@ -925,8 +925,8 @@
                         justify-content-between
                         mt-sm-5 mt-4
                       ">
-                    <button type="submit" class="btn btn-bg-primary" id="signup-btn">
-                      Sign up
+                    <button type="submit" class="btn btn-bg-primary" id="signup-btn" (click)="onSubmitSignUp()">
+                      Register
                     </button>
                     <span class="my-2 fs-14 my-sm-0 d-sm-inline d-block"> or </span>
                     <button class="btn btn-rounded" (click)="loginWithGoogle()">
@@ -938,7 +938,7 @@
             </form>            
             <div class="fs-16 mt-sm-5 mt-3 text-center text-md-left pb-5">
               Already have an account?
-              <a href="#" (click)="showForm('signin')"><span class="fw-600 text-yellow">Sign in</span></a>
+              <a href="#" (click)="showForm('signin')"><span class="fw-600 text-yellow">Log in</span></a>
             </div>
           </div>
 
@@ -950,9 +950,11 @@
             <form id="signin-frm" [formGroup]="signInForm" (ngSubmit)="signIn()">
 
                 <div class="custom-form-control pt-3 with-helper" [class]="(signInForm.get('username').invalid && signInForm.get('username').touched) ? 'error':''">
-                    <input class="custom-input" id="username" type="text" formControlName="username" autocomplete="off" placeholder="Enter Your Mobile No/Email"/>
+                    <input class="custom-input" #username id="username" type="text" formControlName="username" autocomplete="off" placeholder="Enter Your Mobile No/Email"/>
                     <app-show-error [field]="signInForm.get('username')" [name]="'Mobile or Email'"></app-show-error>                    
-                </div>                
+                </div>  
+                
+              <div class="form login-via-password" *ngIf="loginvia">
                 <div class="custom-form-control mt-4 pwd-container">                   
                     <div class="with-icon">
                         <div class="custom-form-control mt-4 with-helper" [class]="(signInForm.get('password').invalid && signInForm.get('password').touched) ? 'error':''">
@@ -981,11 +983,40 @@
                         </div>
                         
                     </div>
-                </div>         
-
+                    
+                </div>       
                 <div class="fs-16 mt-sm-1 mt-1 text-right text-md-right text-sm-right">                    
-                  <a href="javascript:void(0)" (click)="showForgotForm()" class="forgot-pass-link">Forgot password?</a>
-                </div>
+                  <a href="javascript:void(0)" (click)="showOtpPassField('showpassfield',username.value)" class="forgot-pass-link">Login via OTP</a>
+                </div> 
+              </div>
+                
+                <div class="form login-via-opt" *ngIf="!loginvia">
+                  <div class="otp-boxes mt-3 otp-boxes-login">
+                    <div class="container p-0">
+                      
+                      <div class="row">
+                        <div class="col-3">
+                          <input type="text" mask="0" #first placeholder="0" class="custom-input" />
+                        </div>
+                        <div class="col-3">
+                          <input type="text" mask="0" #second placeholder="0" class="custom-input" />
+                        </div>
+                        <div class="col-3">
+                          <input type="text" mask="0" #third placeholder="0" class="custom-input" />
+                        </div>
+                        <div class="col-3">
+                          <input type="text" mask="0" #forth placeholder="0" class="custom-input" />
+                        </div>
+                      </div>
+                    
+                    </div>
+                  </div>
+                  <div class="fs-16 mt-sm-1 mt-1 text-right text-md-right text-sm-right">                    
+                    <a href="javascript:void(0)"  (click)="showOtpPassField('showotpfield','null')" class="forgot-pass-link">Login via Password</a>
+                  </div>                  
+                </div>  
+
+                
 
                 <!-- <div *ngIf="isLoggedin === false">
                   <div>
@@ -1001,7 +1032,7 @@
                     mt-sm-3 mt-3
                     ">
                 <button type="submit" class="btn btn-bg-primary" id="signin-btn">
-                    Sign in
+                  Log in
                 </button>
                 <span class="my-2 fs-14 my-sm-0 d-sm-inline d-block"> or </span>
                 <button class="btn btn-rounded" (click)="loginWithGoogle()">
@@ -1011,9 +1042,13 @@
                 </div>
 
             </form>            
-            <div class="fs-16 mt-sm-5 mt-3 text-center text-md-left pb-5">
+            <div class="fs-16 mt-sm-5 mt-3 text-center text-md-left">              
+              <a href="javascript:void(0)" (click)="showForgotForm()" class="forgot-pass-link"><span class="fw-600 text-yellow">Forgot password?</span></a>
+            </div>
+            
+            <div class="fs-16 mt-sm-3 mt-3 text-center text-md-left pb-1">
                 You don't have an account?
-              <a href="#" (click)="showForm('signup')"><span class="fw-600 text-yellow">Sign up</span></a>
+              <a href="#" (click)="showForm('signup')"><span class="fw-600 text-yellow">Register</span></a>
             </div>
           </div>         
 
@@ -1067,7 +1102,7 @@
                   justify-content-between
                   mt-sm-4 mt-4
                   ">
-              <button type="submit" [disabled]="forgotForm.invalid" class="btn btn-bg-primary" id="forgot-btn">
+              <button type="submit" class="btn btn-bg-primary" id="forgot-btn">
                   Submit
               </button>                
               </div>
@@ -1125,7 +1160,7 @@
               Verify Your Mobile OTP
             </h2>
             <div class="fs-14 sub">
-              Your one time password has sent to +91 8130482336
+              Your one time password has sent to +91 <b>{{mobOtpName}}</b>
             </div>
 
             <div class="form">
@@ -1134,7 +1169,7 @@
                   <form id="mobile-otp-frm" [formGroup]="mobileOtpForm">
                     <div class="row">
                       <div class="col-3">
-                        <input type="text" mask="0" formControlName="first_val" placeholder="0" class="custom-input active" />
+                        <input type="text" mask="0" formControlName="first_val" placeholder="0" class="custom-input" />
                       </div>
                       <div class="col-3">
                         <input type="text" mask="0" formControlName="second_val" placeholder="0" class="custom-input" />
@@ -1154,7 +1189,7 @@
                 <div class="row">
                   <div class="col-12 col-sm-6 py-3 py-sm-0">
                     <button class="btn btn-outlined-dark">
-                      <span class="fs-16">Resend</span>
+                      <span class="fs-16" (click)="resendMobOtp(mobOtpName)">Resend</span>
                     </button>
                   </div>
                   <div class="col-12 col-sm-6 mb-5">
@@ -1187,7 +1222,7 @@
                   align-items-center
                 ">
               <div class="img">
-                <img src="./assets/custom/images/otp.svg" alt="otp" />
+                <img src="./assets/custom/images/Group 12757.svg" alt="otp" />
               </div>
             </div>
           </div>
@@ -1196,7 +1231,7 @@
               Verify Your Email OTP
             </h2>
             <div class="fs-14 sub">
-              Your one time password has sent to bhavesh.nagotha@gmail.com
+              Your one time password has sent to <b>{{emailOtpName}}</b>
             </div>
 
             <div class="form">
@@ -1205,7 +1240,7 @@
                   <form id="email-otp-frm" [formGroup]="emailOtpForm">
                   <div class="row">
                     <div class="col-3">
-                      <input type="text" mask="0" formControlName="first_val" placeholder="0" class="custom-input active" />
+                      <input type="text" mask="0" formControlName="first_val" placeholder="0" class="custom-input" />
                     </div>
                     <div class="col-3">
                       <input type="text" mask="0" formControlName="second_val" placeholder="0" class="custom-input" />
@@ -1225,7 +1260,7 @@
                 <div class="row">
                   <div class="col-12 col-sm-6 py-3 py-sm-0">
                     <button class="btn btn-outlined-dark">
-                      <span class="fs-16">Resend</span>
+                      <span class="fs-16" (click)="resendEmailOtp(emailOtpName)">Resend</span>
                     </button>
                   </div>
                   <div class="col-12 col-sm-6 mb-5">
@@ -1260,7 +1295,7 @@
 
   <div class="slider_hed">
     <div class="slider_hed_p1">
-      <!-- <h2 class="resist-size">PLA<span>NYY</span></h2> -->
+      <h2 class="resist-size">PLA<span>NYY</span></h2>
     </div>
     <div class="slider_hed_p2">
       <a data-toggle="modal" data-target="#exampleModal6">        
@@ -1293,19 +1328,19 @@
   <div class="swiper-container mySwiper">
     <div class="swiper-wrapper">
       <div class="swiper-slide">
-        <!-- <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
+        <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
           src="./assets/custom/images/mobile_slider.jpg" /><img src="./assets/custom/images/ipad_slider.jpg" /><img
-          src="./assets/custom/images/Cover_Push_auto_1920.jpg" /> -->
+          src="./assets/custom/images/Cover_Push_auto_1920.jpg" />
       </div>
       <div class="swiper-slide">
-        <!-- <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
+        <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
           src="./assets/custom/images/mobile_slider.jpg" /><img src="./assets/custom/images/ipad_slider.jpg" /><img
-          src="./assets/custom/images/Cover_Push_auto_1920.jpg" /> -->
+          src="./assets/custom/images/Cover_Push_auto_1920.jpg" />
       </div>
       <div class="swiper-slide">
-        <!-- <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
+        <img src="./assets/custom/images/Cover_auto_x2.jpg" /><img src="./assets/custom/images/Cover_Push_auto_x2.jpg" /><img
           src="./assets/custom/images/mobile_slider.jpg" /><img src="./assets/custom/images/ipad_slider.jpg" /><img
-          src="./assets/custom/images/Cover_Push_auto_1920.jpg" /> -->
+          src="./assets/custom/images/Cover_Push_auto_1920.jpg" />
       </div>
     </div>
     <div class="swiper-pagination"></div>
@@ -1363,7 +1398,7 @@
         <div class="modal-body no-head">
           <div class="signinbox">
             <div class="signinbox_p0">
-              <h2>Sign In</h2>
+              <h2>Sign in</h2>
               <span><a href="#">Password</a><a href="#">OTP</a></span>
             </div>
             <div class="signinbox_p1">
@@ -1380,7 +1415,7 @@
               <a href="#">Forgot password?</a>
             </div>
             <div class="signinbox_p3">
-              <a href="#">Sign in</a>
+              <a href="#">Log in</a>
             </div>
             <div class="signinbox_p4">
               <p>or</p>
@@ -1392,7 +1427,7 @@
               <a href="#"><img src="./assets/custom/images/signin_ic4.svg" /></a>
             </div>
             <div class="signinbox_p6">
-              <p>You don’t have an account? <span>Sign up</span></p>
+              <p>You don’t have an account? <span>Register</span></p>
             </div>
           </div>
         </div>
