@@ -23,6 +23,7 @@ declare var $: any;
 export class HomeComponent implements OnInit {
   signUpForm: any = FormGroup;
   signInForm: any = FormGroup;
+  forgotForm: any = FormGroup;
   requestCallForm: any = FormGroup;
   sentMsgForm: any = FormGroup;
 
@@ -34,7 +35,8 @@ export class HomeComponent implements OnInit {
   isLoggedin: boolean = false;
   sessionActive: boolean = true;
 
-  signupform: boolean = false;
+  signupform: boolean = false;  
+  
 
   customerID: number = 0;
   signUpStoredData:any;
@@ -127,6 +129,19 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  forgot() {
+    if (this.forgotForm.invalid) {
+      return;
+    }
+
+    $(".forgot-pass-modal").addClass("d-none");
+    $(".forgotpass-modal-popup-msg").removeClass("d-none");
+
+    console.log("ok success")
+  }
+
+  
+
   getCurrentUserInfo() {
     this.commonApiService
       .getCurrentUserInfo()
@@ -176,9 +191,14 @@ export class HomeComponent implements OnInit {
 
     if (e == "signin") {
       this.signupform = false;
-    } else {
+    } else  {
       this.signupform = true;
     }
+  }
+
+  showForgotForm(){    
+    $("#signup-modal").addClass("d-none");
+    $(".forgot-pass-modal").removeClass("d-none");
   }
 
   loginWithGoogle(): void {
@@ -277,6 +297,12 @@ export class HomeComponent implements OnInit {
       password: ["", [Validators.required]],
     });
 
+    this.forgotForm = this.fb.group({
+      username: ["", [Validators.required]]      
+    });
+
+    
+
     this.requestCallForm = this.fb.group({
       name: ["", [Validators.required]],
       mobile_number: [
@@ -364,6 +390,7 @@ export class HomeComponent implements OnInit {
       self.signupform = false;
       self.signUpForm.reset();
       self.signInForm.reset();
+      self.forgotForm.reset();
       self.showPass = false;
       self.showCPass = false;
       self.showPassSignIn = false;
