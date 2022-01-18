@@ -41,7 +41,7 @@ import { JwtInterceptor, ErrorInterceptor } from './_helpers';
   ],
   providers: [
   { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-  { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+  // { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   {
       provide: 'SocialAuthServiceConfig',
       useValue: {
@@ -50,7 +50,7 @@ import { JwtInterceptor, ErrorInterceptor } from './_helpers';
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              '325410935378-af37kn81t1mtf1o8bisrmnlc15q551ot.apps.googleusercontent.com'
+              '713781685558-24q23f2de4v0j7d8ao08fu0eimsu38c8.apps.googleusercontent.com'
             )
           }
         ]

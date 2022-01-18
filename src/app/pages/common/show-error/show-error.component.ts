@@ -20,7 +20,6 @@ export class ShowErrorComponent implements OnInit {
 
 
   ngOnInit(): void {
-   
   }
 
 }

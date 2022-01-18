@@ -41,12 +41,25 @@ export class AuthenticationService {
                 return user;
         }));    
     }
+    loginWithGoogle(requestData:any){
+        return this.http.post<any>(environment.baseUrl +"customer/v1/change-password/verify-otp-email ", requestData)
+            .pipe(map(token => {                                                
+                if(token){
+                localStorage.setItem('CurrentToken', JSON.stringify(token.data));
+                this.currentUserSubject.next(token.data);
+                return token.data;
+                }
+                
+        })); 
+    }
     login(requestData:any) {        
             return this.http.post<any>(environment.baseUrl +"auth-updated/token ", requestData)
-            .pipe(map(token => {                                
-                localStorage.setItem('CurrentToken', JSON.stringify(token));
-                this.currentUserSubject.next(token);
-                return token;
+            .pipe(map(data => {                                
+                localStorage.setItem('CurrentToken', JSON.stringify(data.token));
+                this.currentUserSubject.next(data.token);
+                return data.token;
+        },(error:any)=>{
+            return error
         }));    
     }
 

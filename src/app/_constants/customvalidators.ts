@@ -78,6 +78,26 @@ export class CustomValidator {
           return null;
         };
       }
+
+      static mobileNumber(control: AbstractControl): ValidationErrors | null {
+        if (control.value != null && control.value != '' && typeof control.value != 'number' ) {
+
+            if (!(control.value as string).match('^[0-9]+$')) {
+                return {
+                    contactNumberPattern: true,
+                    msg: "only allow numeric."
+                }
+            }
+
+            if ((control.value as string).length != 10) {
+                return {
+                    contactNumberLength: true,
+                    msg: "Mobile no should be 10 digit."
+                }
+            }
+        }
+        return null;
+    }
     
 
     
